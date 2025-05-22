@@ -819,6 +819,40 @@
       class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const clientSlider = document.getElementById("clientlogo");
+  const clients = clientSlider.children.length;
+  const clientWidth = clients * 220;
+  clientSlider.style.width = clientWidth + "px";
+
+  let rotating = true;
+  const clientSpeed = 1800;
+
+  let seeClients = setInterval(rotateClients, clientSpeed);
+
+  const ourClients = document.getElementById("ourclients");
+  ourClients.addEventListener("mouseenter", () => rotating = false);
+  ourClients.addEventListener("mouseleave", () => rotating = true);
+
+  function rotateClients() {
+    if (rotating) {
+      const first = clientSlider.querySelector("li:first-child");
+      first.style.transition = "margin-left 2s";
+      first.style.marginLeft = "-220px";
+
+      setTimeout(() => {
+        first.style.transition = "";
+        first.style.marginLeft = "0px";
+        clientSlider.appendChild(first);
+      }, 2000);
+    }
+  }
+});
+</script>
+
+
+  
   <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
   <script src="assets/vendor/aos/aos.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
