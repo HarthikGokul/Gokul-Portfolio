@@ -31,7 +31,7 @@
 
 </head>
 
-<body>
+<body oncontextmenu="return false;">
 
   <!-- ======= Mobile nav toggle button ======= -->
   <!-- <button type="button" class="mobile-nav-toggle d-xl-none"><i class="bi bi-list mobile-nav-toggle"></i></button> -->
@@ -854,6 +854,33 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 </script>
+
+<!--  incpec hide -->
+  <script>
+    // Disable right-click
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+
+    // Block F12, Ctrl+Shift+I, Ctrl+U
+    document.addEventListener('keydown', function(e) {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) ||
+        (e.ctrlKey && e.key === "u")
+      ) {
+        e.preventDefault();
+      }
+    });
+
+    // Extra: Detect DevTools (optional)
+    setInterval(() => {
+      const devtoolsOpened = window.outerHeight - window.innerHeight > 200;
+      if (devtoolsOpened) {
+        document.body.innerHTML = "<h1>Inspecting is not allowed 😠</h1>";
+      }
+    }, 1000);
+  </script>
 
 
   
