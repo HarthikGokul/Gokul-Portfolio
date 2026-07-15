@@ -47,11 +47,6 @@
         <li><a href="#portfolio" class="nav-link scrollto"><i class="bx bx-book-content"></i> <span>Projects</span></a>
         </li>
         <li><a href="#contact" class="nav-link scrollto"><i class="bx bx-envelope"></i> <span>Contact</span></a></li>
-        <li>
-          <a href="#" id="theme-toggle" class="nav-link" title="Toggle dark/light theme">
-            <i class="bx bx-moon" id="theme-toggle-icon"></i> <span>Theme</span>
-          </a>
-        </li>
       </ul>
     </nav><!-- .nav-menu -->
 
@@ -901,38 +896,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
-
-  <!-- Theme Toggle Script -->
-  <script>
-    (function () {
-      const root = document.documentElement;
-      const icon = document.getElementById('theme-toggle-icon');
-      const toggleBtn = document.getElementById('theme-toggle');
-
-      function applyTheme(theme) {
-        if (theme === 'dark') {
-          root.classList.add('dark-theme');
-          if (icon) { icon.classList.remove('bx-moon'); icon.classList.add('bx-sun'); }
-        } else {
-          root.classList.remove('dark-theme');
-          if (icon) { icon.classList.remove('bx-sun'); icon.classList.add('bx-moon'); }
-        }
-      }
-
-      const saved = localStorage.getItem('theme') || 'light';
-      applyTheme(saved);
-
-      if (toggleBtn) {
-        toggleBtn.addEventListener('click', function (e) {
-          e.preventDefault();
-          const isDark = root.classList.contains('dark-theme');
-          const next = isDark ? 'light' : 'dark';
-          applyTheme(next);
-          localStorage.setItem('theme', next);
-        });
-      }
-    })();
-  </script>
 
 </body>
 
