@@ -548,7 +548,7 @@
                 <div class="portfolio-links">
                   <a href="assets/img/portfolio/Login 4.png" data-gallery="portfolioGallery"
                     class="portfolio-lightbox"><i class="bx bx-plus"></i></a>
-                   <a href="https://hrpops.com/" class="portfolio-details-lightbox" data-glightbox="type: external"
+                   <a href="https://hrpops.com/beta/" class="portfolio-details-lightbox" data-glightbox="type: external"
                     title="Portfolio Details"><i class="bx bx-link"></i></a> 
                 </div>
               </div>
@@ -594,8 +594,6 @@
                 <div class="portfolio-links">
                   <a href="assets/img/portfolio/Chat Bot 2.png" data-gallery="portfolioGallery"
                     class="portfolio-lightbox"><i class="bx bx-plus"></i></a>
-                   <a href="https://www.medallionkarate.com/" class="portfolio-details-lightbox"
-                    data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
                 </div>
               </div>
             </div>
@@ -610,8 +608,6 @@
                 <div class="portfolio-links">
                   <a href="assets/img/portfolio/Login 5.png" data-gallery="portfolioGallery"
                     class="portfolio-lightbox"><i class="bx bx-plus"></i></a>
-                  <a href="https://thedietbowl.com/" class="portfolio-details-lightbox"
-                    data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
                 </div>
               </div>
             </div>
@@ -707,8 +703,6 @@
                 <div class="portfolio-links">
                   <a href="assets/img/portfolio/Dashboard 3.png" data-gallery="portfolioGallery"
                     class="portfolio-lightbox"><i class="bx bx-plus"></i></a>
-                  <a href="https://hrpops.com/beta/" data-gallery="portfolioGallery"
-                    class="portfolio-lightbox"><i class="bx bx-plus"></i></a>
                 </div>
               </div>
             </div>
@@ -732,12 +726,10 @@
             <div class="portfolio-wrap">
               <img src="assets/img/portfolio/Dashboard 4.png" class="img-fluid" alt="">
               <div class="portfolio-info">
-                <h4>CRM Dashboard 3</h4>
+                <h4>Dashboard 3</h4>
                 <p>Dashboard</p>
                 <div class="portfolio-links">
-                   <a href="assets/img/portfolio/Dashboard 4.png" data-gallery="portfolioGallery"
-                    class="portfolio-lightbox"><i class="bx bx-plus"></i></a>
-                  <a href="https://bosstro.com/#/signup" data-gallery="portfolioGallery"
+                  <a href="assets/img/portfolio/Dashboard 4.png" data-gallery="portfolioGallery"
                     class="portfolio-lightbox"><i class="bx bx-plus"></i></a>
                 </div>
               </div>
@@ -835,6 +827,7 @@
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
       class="bi bi-arrow-up-short"></i></a>
 
+  <!-- ======= Chatbot Widget ======= -->
   <!-- Vendor JS Files -->
   <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -939,6 +932,85 @@ document.addEventListener("DOMContentLoaded", function () {
           localStorage.setItem('theme', next);
         });
       }
+    })();
+  </script>
+
+  <!-- ======= Chatbot Widget ======= -->
+  <div id="chatbot-toggle-btn">
+    <i class="bx bx-message-dots"></i>
+  </div>
+
+  <div id="chatbot-widget">
+    <div id="chatbot-header">
+      <span>Chatbot</span>
+      <i class="bx bx-x" id="chatbot-close-btn"></i>
+    </div>
+    <div id="chatbot-body">
+      <div class="chat-msg bot-msg">
+        <div class="bot-avatar"><i class="bx bx-bot"></i></div>
+        <div class="msg-bubble">Hi there. How can I help you today?</div>
+      </div>
+    </div>
+    <div id="chatbot-footer">
+      <input type="text" id="chatbot-input" placeholder="Enter a message...">
+      <button id="chatbot-send-btn"><i class="bx bx-send"></i></button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const toggleBtn = document.getElementById('chatbot-toggle-btn');
+      const widget = document.getElementById('chatbot-widget');
+      const closeBtn = document.getElementById('chatbot-close-btn');
+      const sendBtn = document.getElementById('chatbot-send-btn');
+      const input = document.getElementById('chatbot-input');
+      const body = document.getElementById('chatbot-body');
+
+      function openChat() {
+        widget.classList.add('open');
+        toggleBtn.classList.add('hidden');
+      }
+      function closeChat() {
+        widget.classList.remove('open');
+        toggleBtn.classList.remove('hidden');
+      }
+
+      toggleBtn.addEventListener('click', openChat);
+      closeBtn.addEventListener('click', closeChat);
+
+      function addMessage(text, sender) {
+        const msg = document.createElement('div');
+        msg.className = 'chat-msg ' + (sender === 'user' ? 'user-msg' : 'bot-msg');
+        if (sender === 'bot') {
+          msg.innerHTML = '<div class="bot-avatar"><i class="bx bx-bot"></i></div><div class="msg-bubble">' + text + '</div>';
+        } else {
+          msg.innerHTML = '<div class="msg-bubble">' + text + '</div>';
+        }
+        body.appendChild(msg);
+        body.scrollTop = body.scrollHeight;
+      }
+
+      const contactReply =
+        "Here's how you can reach me:<br>" +
+        "👤 Hi , i am Gokul<br>" +
+        "📞 +91 8124112115<br>" +
+        "✉️ <a href=\"mailto:harthikgokul@gmail.com\">harthikgokul@gmail.com</a><br>" +
+        "📍 4/56 Yadava Street, T.U.Managi, Ramnad - 623533";
+
+      function sendMessage() {
+        const text = input.value.trim();
+        if (!text) return;
+        addMessage(text, 'user');
+        input.value = '';
+        setTimeout(function () {
+          addMessage(contactReply, 'bot');
+        }, 700);
+      }
+
+      sendBtn.addEventListener('click', sendMessage);
+      input.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') sendMessage();
+      });
     })();
   </script>
 
