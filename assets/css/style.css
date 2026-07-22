@@ -1401,7 +1401,7 @@ html.dark-theme #theme-toggle-icon {
 #chatbot-toggle-btn {
   position: fixed;
   right: 20px;
-  bottom: 20px;
+  bottom: 40px;
   width: 52px;
   height: 52px;
   border-radius: 50%;
@@ -1430,7 +1430,7 @@ html.dark-theme #theme-toggle-icon {
 #chatbot-widget {
   position: fixed;
   right: 20px;
-  bottom: 20px;
+  bottom: 40px;
   width: 340px;
   max-width: calc(100vw - 40px);
   height: 480px;
