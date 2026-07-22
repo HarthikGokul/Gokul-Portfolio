@@ -968,14 +968,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
       function openChat() {
         widget.classList.add('open');
-        toggleBtn.classList.add('hidden');
+        toggleBtn.classList.add('open');
+        toggleBtn.innerHTML = '<i class="bx bx-x"></i>';
       }
       function closeChat() {
         widget.classList.remove('open');
-        toggleBtn.classList.remove('hidden');
+        toggleBtn.classList.remove('open');
+        toggleBtn.innerHTML = '<i class="bx bx-message-dots"></i>';
       }
 
-      toggleBtn.addEventListener('click', openChat);
+      toggleBtn.addEventListener('click', function () {
+        if (widget.classList.contains('open')) {
+          closeChat();
+        } else {
+          openChat();
+        }
+      });
       closeBtn.addEventListener('click', closeChat);
 
       function addMessage(text, sender) {
@@ -992,9 +1000,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const contactReply =
         "Here's how you can reach me:<br>" +
-        "📍 4/56 Yadava Street, T.U.Managi, Ramnad - 623533<br>" +
+         "👤 Hi , i am Gokul<br>" +
+        "📞 +91 8124112115<br>" +
         "✉️ <a href=\"mailto:harthikgokul@gmail.com\">harthikgokul@gmail.com</a><br>" +
-        "📞 +91 8124112115";
+        "📍 4/56 Yadava Street, T.U.Managi, Ramnad - 623533";
 
       function sendMessage() {
         const text = input.value.trim();
