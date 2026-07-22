@@ -878,14 +878,6 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
       }
     });
-
-    // Extra: Detect DevTools (optional)
-    setInterval(() => {
-      const devtoolsOpened = window.outerHeight - window.innerHeight > 200;
-      if (devtoolsOpened) {
-        document.body.innerHTML = "<h1>Inspecting is not allowed 😠</h1>";
-      }
-    }, 1000);
   </script>
 
 
@@ -1000,10 +992,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const contactReply =
         "Here's how you can reach me:<br>" +
-         "👤 Hi , i am Gokul<br>" +
+        "👤 Hi , i am Gokul<br>" +
         "📞 +91 8124112115<br>" +
         "✉️ <a href=\"mailto:harthikgokul@gmail.com\">harthikgokul@gmail.com</a><br>" +
-        "📍 4/56 Yadava Street, T.U.Managi, Ramnad - 623533";
+        "📍 Chennai - 01";
 
       function sendMessage() {
         const text = input.value.trim();
