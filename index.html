@@ -759,6 +759,30 @@
     </section>
     <!-- End Portfolio Section -->
 
+
+      <!-- ======= Carousel Section ======= -->
+    <section id="carousel" class="carousel-section">
+      <div class="container" data-aos="fade-up">
+        <div class="section-title">
+          <h2>Gallery</h2>
+          <p>Click a slide to browse through</p>
+        </div>
+        <div class="mbc-carousel" id="mbcCarousel">
+          <div class="mbc-track" id="mbcTrack">
+            <div class="mbc-item" data-index="0"><img src="https://picsum.photos/seed/gallery1/900/600" alt="Gallery image 1"></div>
+            <div class="mbc-item" data-index="1"><img src="https://picsum.photos/seed/gallery2/900/600" alt="Gallery image 2"></div>
+            <div class="mbc-item" data-index="2"><img src="https://picsum.photos/seed/gallery3/900/600" alt="Gallery image 3"></div>
+            <div class="mbc-item" data-index="3"><img src="https://picsum.photos/seed/gallery4/900/600" alt="Gallery image 4"></div>
+            <div class="mbc-item" data-index="4"><img src="https://picsum.photos/seed/gallery5/900/600" alt="Gallery image 5"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- End Carousel Section -->
+
+
+    
+
     <!-- ======= Contact Section ======= -->
     <section id="contact" class="contact">
       <div class="container" data-aos="fade-up">
@@ -1013,6 +1037,65 @@ document.addEventListener("DOMContentLoaded", function () {
       input.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') sendMessage();
       });
+    })();
+  </script>
+
+
+  <!-- Multi-browse Carousel Script -->
+  <script>
+    (function () {
+      const items = document.querySelectorAll('#mbcTrack .mbc-item');
+      if (!items.length) return;
+      let current = 0;
+ 
+      function render() {
+        items.forEach((item, i) => {
+          item.classList.remove('mbc-large', 'mbc-medium', 'mbc-small');
+          const diff = i - current;
+          if (diff === 0) {
+            item.classList.add('mbc-large');
+          } else if (Math.abs(diff) === 1) {
+            item.classList.add('mbc-medium');
+          } else {
+            item.classList.add('mbc-small');
+          }
+        });
+        const activeItem = items[current];
+        if (activeItem && activeItem.scrollIntoView) {
+          activeItem.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+      }
+ 
+      items.forEach((item, i) => {
+        item.addEventListener('click', function () {
+          current = i;
+          render();
+        });
+      });
+ 
+      // Swipe support for touch devices
+      const carousel = document.getElementById('mbcCarousel');
+      let touchStartX = 0;
+      let touchEndX = 0;
+ 
+      carousel.addEventListener('touchstart', function (e) {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+ 
+      carousel.addEventListener('touchend', function (e) {
+        touchEndX = e.changedTouches[0].screenX;
+        const diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 40) {
+          if (diff > 0 && current < items.length - 1) {
+            current++;
+          } else if (diff < 0 && current > 0) {
+            current--;
+          }
+          render();
+        }
+      }, { passive: true });
+ 
+      render();
     })();
   </script>
 
