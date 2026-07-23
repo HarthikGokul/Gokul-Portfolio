@@ -1611,3 +1611,118 @@ html.dark-theme .chat-msg.bot-msg .msg-bubble {
   background: #3a3a3a;
   color: #e6e6e6;
 }
+
+/*--------------------------------------------------------------
+# Material Design 3 - Multi-browse Carousel
+--------------------------------------------------------------*/
+.carousel-section {
+  padding: 60px 0;
+  background: #fff;
+}
+ 
+html.dark-theme .carousel-section {
+  background: #121212;
+}
+ 
+.mbc-carousel {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 16px;
+}
+ 
+.mbc-track {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.45s cubic-bezier(0.2, 0, 0, 1);
+  will-change: transform;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+ 
+.mbc-track::-webkit-scrollbar {
+  display: none;
+}
+ 
+.mbc-item {
+  position: relative;
+  flex: 0 0 auto;
+  height: 500px;
+  width: 500px;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.45;
+  transform: scale(0.94);
+  transition: opacity 0.45s ease, transform 0.45s ease, width 0.45s ease;
+}
+ 
+.mbc-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+ 
+.mbc-item.mbc-large {
+  width: 500px;
+  opacity: 1;
+  transform: scale(1);
+}
+ 
+.mbc-item.mbc-medium {
+  width: 260px;
+  opacity: 0.85;
+  transform: scale(0.97);
+}
+ 
+.mbc-item.mbc-small {
+  width: 120px;
+  opacity: 0.4;
+  transform: scale(0.92);
+}
+ 
+@media (max-width: 768px) {
+  .mbc-item {
+    height: 320px;
+    width: 320px;
+  }
+  .mbc-item.mbc-large {
+    width: 320px;
+  }
+  .mbc-item.mbc-medium {
+    width: 160px;
+  }
+  .mbc-item.mbc-small {
+    width: 80px;
+  }
+}
+ 
+@media (max-width: 480px) {
+  .carousel-section {
+    padding: 40px 0;
+  }
+  .mbc-carousel {
+    border-radius: 12px;
+  }
+  .mbc-track {
+    gap: 6px;
+  }
+  .mbc-item {
+    height: 220px;
+    width: 220px;
+    border-radius: 12px;
+  }
+  .mbc-item.mbc-large {
+    width: 220px;
+  }
+  .mbc-item.mbc-medium {
+    width: 110px;
+  }
+  .mbc-item.mbc-small {
+    width: 60px;
+  }
+}
