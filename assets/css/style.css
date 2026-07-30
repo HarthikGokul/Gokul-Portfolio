@@ -52,6 +52,26 @@ h6 {
 @media (max-width: 992px) {
   #cursor-glow { display: none; }
 }
+
+/*--------------------------------------------------------------
+# Click Ripple Effect
+--------------------------------------------------------------*/
+.ripple-span {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  transform: scale(0);
+  animation: rippleAnim 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes rippleAnim {
+  to {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
 .back-to-top {
   position: fixed;
   visibility: hidden;
@@ -1566,6 +1586,18 @@ section {
   font-size: 14px;
   text-align: center;
   padding: 30px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+#footer::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath d='M0,20 C200,45 400,-5 600,20 C800,45 1000,-5 1200,20 L1200,0 L0,0 Z' fill='%23000'/%3E%3C/svg%3E") center/cover no-repeat;
 }
 
 #footer h3 {
@@ -1601,12 +1633,26 @@ section {
   width: 36px;
   height: 36px;
   transition: 0.3s;
+  animation: footerIconDrop 0.6s ease backwards;
+}
+
+#footer .social-links a:nth-child(1) { animation-delay: 0.05s; }
+#footer .social-links a:nth-child(2) { animation-delay: 0.15s; }
+#footer .social-links a:nth-child(3) { animation-delay: 0.25s; }
+#footer .social-links a:nth-child(4) { animation-delay: 0.35s; }
+
+@keyframes footerIconDrop {
+  0%   { opacity: 0; transform: translateY(-18px) scale(0.6); }
+  60%  { opacity: 1; transform: translateY(4px) scale(1.08); }
+  100% { transform: translateY(0) scale(1); }
 }
 
 #footer .social-links a:hover {
   background: #0678e3;
   color: #fff;
   text-decoration: none;
+  transform: translateY(-5px) rotate(8deg);
+  box-shadow: 0 8px 18px rgba(5, 99, 187, 0.4);
 }
 
 #footer .copyright {
