@@ -1110,6 +1110,47 @@ document.addEventListener("DOMContentLoaded", function () {
     })();
   </script>
 
+  <!-- Ripple + 3D Tilt Script -->
+  <script>
+    (function () {
+      // Click ripple effect on buttons/links
+      function createRipple(e) {
+        const target = e.currentTarget;
+        const rect = target.getBoundingClientRect();
+        const ripple = document.createElement('span');
+        const size = Math.max(rect.width, rect.height);
+        ripple.className = 'ripple-span';
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+        ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+        if (getComputedStyle(target).position === 'static') {
+          target.style.position = 'relative';
+        }
+        target.style.overflow = target.style.overflow || 'hidden';
+        target.appendChild(ripple);
+        setTimeout(function () { ripple.remove(); }, 650);
+      }
+      document.querySelectorAll('.theme-btn, .back-to-top, button[type=submit], #portfolio-flters li').forEach(function (el) {
+        el.addEventListener('click', createRipple);
+      });
+
+      // 3D tilt effect on portfolio cards
+      document.querySelectorAll('.portfolio-wrap').forEach(function (card) {
+        card.style.transformStyle = 'preserve-3d';
+        card.style.perspective = '600px';
+        card.addEventListener('mousemove', function (e) {
+          const rect = card.getBoundingClientRect();
+          const px = (e.clientX - rect.left) / rect.width - 0.5;
+          const py = (e.clientY - rect.top) / rect.height - 0.5;
+          card.style.transform = 'perspective(600px) rotateX(' + (py * -8) + 'deg) rotateY(' + (px * 8) + 'deg) translateY(-8px) scale(1.02)';
+        });
+        card.addEventListener('mouseleave', function () {
+          card.style.transform = '';
+        });
+      });
+    })();
+  </script>
+
   <!-- Multi-browse Carousel Script -->
   <script>
     (function () {
