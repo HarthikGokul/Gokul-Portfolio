@@ -26,8 +26,32 @@ h6 {
 }
 
 /*--------------------------------------------------------------
-# Back to top button
+# Custom Cursor Glow
 --------------------------------------------------------------*/
+#cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid rgba(5, 99, 187, 0.55);
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, opacity 0.3s ease;
+  mix-blend-mode: difference;
+}
+
+#cursor-glow.grow {
+  width: 46px;
+  height: 46px;
+  border-color: rgba(255, 193, 7, 0.8);
+}
+
+@media (max-width: 992px) {
+  #cursor-glow { display: none; }
+}
 .back-to-top {
   position: fixed;
   visibility: hidden;
@@ -214,6 +238,21 @@ h6 {
 .nav-menu li:hover>a {
   color: #fff;
   background: #0563bb;
+  animation: navActivePop 0.4s ease;
+}
+
+@keyframes navActivePop {
+  0%   { transform: scale(0.9); }
+  60%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+.nav-menu a i {
+  transition: transform 0.3s ease;
+}
+
+.nav-menu a:hover i {
+  transform: translateY(-2px) scale(1.15);
 }
 
 .nav-menu a:hover span,
@@ -601,6 +640,37 @@ section {
   font-weight: 700;
   font-size: 26px;
   color: #728394;
+}
+
+/* ---- Decorative floating blobs (used inside .about, .skills etc.) ---- */
+.section-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(50px);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  animation: blobDrift 12s ease-in-out infinite;
+}
+
+.section-blob.blob-blue   { background: #0563bb; }
+.section-blob.blob-gold   { background: #ffc107; animation-delay: 2s; }
+.section-blob.blob-teal   { background: #14b8a6; animation-delay: 4s; }
+
+@keyframes blobDrift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(30px, -25px) scale(1.15); }
+  66%      { transform: translate(-25px, 20px) scale(0.9); }
+}
+
+.about, .skills {
+  position: relative;
+  overflow: hidden;
+}
+
+.about > .container, .skills > .container {
+  position: relative;
+  z-index: 1;
 }
 
 .about img.img-fluid {
@@ -1703,11 +1773,16 @@ html.dark-theme #preloader {
 
 /* Theme toggle icon color */
 #theme-toggle-icon {
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
+}
+
+#theme-toggle:hover #theme-toggle-icon {
+  transform: rotate(180deg);
 }
 
 html.dark-theme #theme-toggle-icon {
   color: #ffd166;
+  transform: rotate(360deg);
 }
 
 /*--------------------------------------------------------------
