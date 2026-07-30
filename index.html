@@ -33,6 +33,9 @@
 
 <body oncontextmenu="return false;">
 
+  <!-- Custom cursor glow -->
+  <div id="cursor-glow"></div>
+
   <!-- ======= Mobile nav toggle button ======= -->
   <!-- <button type="button" class="mobile-nav-toggle d-xl-none"><i class="bi bi-list mobile-nav-toggle"></i></button> -->
   <i class="bi bi-list mobile-nav-toggle d-lg-none" style="padding:10px; background-color:#fff; color:#000; " ></i>
@@ -126,6 +129,8 @@
   <main id="main" style="margin-left:0px !important">
     <!-- ======= About Section ======= -->
     <section id="about" class="about">
+      <div class="section-blob blob-blue" style="width:260px;height:260px; top:-60px; left:-60px;"></div>
+      <div class="section-blob blob-gold" style="width:220px;height:220px; bottom:-50px; right:-40px;"></div>
       <div class="container" data-aos="fade-up">
 
         <div class="section-title">
@@ -225,6 +230,8 @@
 
     <!-- ======= Skills Section ======= -->
     <section id="skills" class="skills section-bg">
+      <div class="section-blob blob-teal" style="width:240px;height:240px; top:-40px; right:-60px;"></div>
+      <div class="section-blob blob-blue" style="width:200px;height:200px; bottom:-40px; left:-50px;"></div>
       <div class="container" data-aos="fade-up">
 
         <div class="section-title">
@@ -1059,6 +1066,49 @@ document.addEventListener("DOMContentLoaded", function () {
     })();
   </script>
 
+
+  <!-- Custom Cursor + Magnetic Buttons Script -->
+  <script>
+    (function () {
+      const cursor = document.getElementById('cursor-glow');
+      if (!cursor) return;
+      let mouseX = 0, mouseY = 0, curX = 0, curY = 0;
+
+      window.addEventListener('mousemove', function (e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      function animateCursor() {
+        curX += (mouseX - curX) * 0.18;
+        curY += (mouseY - curY) * 0.18;
+        cursor.style.left = curX + 'px';
+        cursor.style.top = curY + 'px';
+        requestAnimationFrame(animateCursor);
+      }
+      animateCursor();
+
+      const growTargets = document.querySelectorAll('a, button, .theme-btn, .portfolio-wrap, .nav-menu a');
+      growTargets.forEach(function (el) {
+        el.addEventListener('mouseenter', function () { cursor.classList.add('grow'); });
+        el.addEventListener('mouseleave', function () { cursor.classList.remove('grow'); });
+      });
+
+      // Magnetic effect for hero buttons
+      const magnetButtons = document.querySelectorAll('#hero .theme-btn');
+      magnetButtons.forEach(function (btn) {
+        btn.addEventListener('mousemove', function (e) {
+          const rect = btn.getBoundingClientRect();
+          const relX = e.clientX - rect.left - rect.width / 2;
+          const relY = e.clientY - rect.top - rect.height / 2;
+          btn.style.transform = 'translate(' + relX * 0.25 + 'px,' + relY * 0.35 + 'px)';
+        });
+        btn.addEventListener('mouseleave', function () {
+          btn.style.transform = 'translate(0,0)';
+        });
+      });
+    })();
+  </script>
 
   <!-- Multi-browse Carousel Script -->
   <script>
