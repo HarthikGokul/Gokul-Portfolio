@@ -42,6 +42,15 @@ h6 {
   transition: all 0.4s;
 }
 
+.back-to-top.active {
+  animation: backToTopBounce 2.4s ease-in-out infinite;
+}
+
+@keyframes backToTopBounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
 .back-to-top i {
   font-size: 28px;
   color: #fff;
@@ -51,6 +60,7 @@ h6 {
 .back-to-top:hover {
   background: #0678e3;
   color: #fff;
+  transform: scale(1.1);
 }
 
 .back-to-top.active {
@@ -536,6 +546,7 @@ section {
   padding-bottom: 20px;
   position: relative;
   color: #45505b;
+  display: inline-block;
 }
 
 .section-title h2::before {
@@ -558,6 +569,16 @@ section {
   background: #0563bb;
   bottom: 0;
   left: calc(50% - 20px);
+  border-radius: 3px;
+  animation: titleUnderlineGrow 2.4s ease-in-out infinite;
+  background: linear-gradient(90deg, #0563bb, #ffc107, #0563bb);
+  background-size: 200% auto;
+}
+
+@keyframes titleUnderlineGrow {
+  0%   { width: 40px; background-position: 0% center; }
+  50%  { width: 90px; background-position: 100% center; }
+  100% { width: 40px; background-position: 0% center; }
 }
 
 .section-title p {
@@ -580,6 +601,17 @@ section {
   font-weight: 700;
   font-size: 26px;
   color: #728394;
+}
+
+.about img.img-fluid {
+  border-radius: 12px;
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  will-change: transform;
+}
+
+.about img.img-fluid:hover {
+  transform: perspective(700px) rotateY(6deg) rotateX(2deg) scale(1.03);
+  box-shadow: 0 20px 40px rgba(5, 99, 187, 0.25);
 }
 
 .about .content ul {
@@ -622,6 +654,28 @@ section {
     justify-content: center;
     position: relative;
     z-index: 1;
+    animation: statsIconPop 0.6s ease-out;
+}
+
+.stats i::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50px;
+  border: 2px solid rgba(255, 193, 7, 0.6);
+  animation: statsPulseRing 2.4s ease-out infinite;
+  z-index: -1;
+}
+
+@keyframes statsPulseRing {
+  0%   { transform: scale(1);   opacity: 0.8; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+@keyframes statsIconPop {
+  0%   { transform: scale(0.4); opacity: 0; }
+  70%  { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); }
 }
 
 .stats .stats-item {
@@ -716,13 +770,30 @@ section {
 
 .skills .progress-bar-wrap {
   background: #f2f3f5;
+  overflow: hidden;
 }
 
 .skills .progress-bar {
   width: 1px;
   height: 10px;
   transition: 0.9s;
-  background-color: #0563bb;
+  background: linear-gradient(90deg, #0563bb, #ffc107);
+  position: relative;
+  overflow: hidden;
+}
+
+.skills .progress-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+  transform: translateX(-100%);
+  animation: skillBarShine 2.6s ease-in-out infinite;
+}
+
+@keyframes skillBarShine {
+  0%   { transform: translateX(-100%); }
+  50%, 100% { transform: translateX(150%); }
 }
 
 /*--------------------------------------------------------------
@@ -741,6 +812,11 @@ section {
   margin-top: -2px;
   border-left: 2px solid #0563bb;
   position: relative;
+  transition: transform 0.35s ease;
+}
+
+.resume .resume-item:hover {
+  transform: translateX(8px);
 }
 
 .resume .resume-item h4 {
@@ -782,8 +858,16 @@ section {
   border-radius: 50px;
   left: -9px;
   top: 0;
-  background: #fff;
+  background: #ffc107;
   border: 2px solid #0563bb;
+  box-shadow: 0 0 0 rgba(255, 193, 7, 0.6);
+  animation: resumeDotPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes resumeDotPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.6); }
+  70%  { box-shadow: 0 0 0 10px rgba(255, 193, 7, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
 }
 
 /*--------------------------------------------------------------
@@ -814,6 +898,25 @@ section {
   color: #272829;
   margin-bottom: 5px;
   transition: all 0.3s ease-in-out;
+  position: relative;
+}
+
+.portfolio #portfolio-flters li::after {
+  content: "";
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  bottom: 4px;
+  height: 2px;
+  background: #0563bb;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+
+.portfolio #portfolio-flters li:hover::after,
+.portfolio #portfolio-flters li.filter-active::after {
+  transform: scaleX(1);
 }
 
 .portfolio #portfolio-flters li:hover,
@@ -826,11 +929,24 @@ section {
 }
 
 .portfolio .portfolio-wrap {
-  transition: 0.3s;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
   position: relative;
   overflow: hidden;
   z-index: 1;
   background: rgba(69, 80, 91, 0.8);
+}
+
+.portfolio .portfolio-wrap:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.25);
+}
+
+.portfolio .portfolio-wrap img {
+  transition: transform 0.6s ease;
+}
+
+.portfolio .portfolio-wrap:hover img {
+  transform: scale(1.12);
 }
 
 .portfolio .portfolio-wrap::before {
@@ -1328,6 +1444,13 @@ section {
   border-radius: 4px;
   box-shadow: none;
   font-size: 14px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact .php-email-form input:focus,
+.contact .php-email-form textarea:focus {
+  border-color: #0563bb;
+  box-shadow: 0 0 0 4px rgba(5, 99, 187, 0.15);
 }
 
 .contact .php-email-form input[type=text],
@@ -1350,6 +1473,8 @@ section {
 
 .contact .php-email-form button[type=submit]:hover {
   background: #0678e3;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(5, 99, 187, 0.35);
 }
 
 @keyframes animate-loading {
@@ -1466,7 +1591,23 @@ section {
   max-height: 100%;
   -webkit-transition: 0 linear left;
   -moz-transition: 0 linear left;
-  transition: 0 linear left;
+  transition: transform 0.35s ease, filter 0.35s ease;
+  filter: grayscale(100%) opacity(0.7);
+  animation: clientLogoFloat 4s ease-in-out infinite;
+}
+
+#ourclients .clients-wrap ul li:nth-child(even) img {
+  animation-delay: 0.6s;
+}
+
+#ourclients .clients-wrap ul li img:hover {
+  filter: grayscale(0%) opacity(1);
+  transform: scale(1.15) translateY(-4px);
+}
+
+@keyframes clientLogoFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-5px); }
 }
 #ourclients h3{
 border-bottom:2px solid #3399ff;
