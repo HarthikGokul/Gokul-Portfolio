@@ -1501,6 +1501,60 @@ section {
   background: #fff;
 }
 
+/* ---- Contact image glowing frame ---- */
+.contact-img {
+  position: relative;
+}
+
+.contact-img img {
+  border-radius: 12px;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.5s ease;
+}
+
+.contact-img::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: 8px;
+  bottom: 8px;
+  border-radius: 16px;
+  background: linear-gradient(120deg, #0563bb, #ffc107, #0563bb, #ffc107);
+  background-size: 300% 300%;
+  animation: contactBorderGlow 6s ease infinite;
+  z-index: 0;
+  filter: blur(2px);
+}
+
+@keyframes contactBorderGlow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.contact-img:hover img {
+  transform: scale(1.02) rotate(-0.5deg);
+}
+
+/* ---- Info card slide-in reveal ---- */
+.contact .info .address,
+.contact .info .email,
+.contact .info .phone {
+  opacity: 0;
+  transform: translateX(40px);
+  animation: infoSlideIn 0.7s ease forwards;
+}
+
+.contact .info .address { animation-delay: 0.1s; }
+.contact .info .email    { animation-delay: 0.3s; }
+.contact .info .phone    { animation-delay: 0.5s; }
+
+@keyframes infoSlideIn {
+  to { opacity: 1; transform: translateX(0); }
+}
+
 .contact .info i {
   font-size: 20px;
   color: #0563bb;
@@ -1709,6 +1763,46 @@ section {
   font-family: "Poppins", sans-serif;
   padding: 0;
   margin: 0 0 15px 0;
+  background: linear-gradient(90deg, #fff, #ffc107, #0d8bff, #fff);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: footerNameShine 5s linear infinite;
+}
+
+@keyframes footerNameShine {
+  0%   { background-position: 0% center; }
+  100% { background-position: 300% center; }
+}
+
+/* ---- Footer starfield ---- */
+#footer .footer-stars {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+#footer .footer-stars span {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #fff;
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: footerStarTwinkle 3s ease-in-out infinite;
+}
+
+@keyframes footerStarTwinkle {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50%      { opacity: 0.9;  transform: scale(1.6); }
+}
+
+#footer > * {
+  position: relative;
+  z-index: 1;
 }
 
 #footer p {
@@ -1791,6 +1885,26 @@ section {
 
 #footer .copyright {
   margin: 0 0 5px 0;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 6px;
+}
+
+#footer .copyright::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 60px;
+  height: 2px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, transparent, #ffc107, transparent);
+  animation: copyrightPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes copyrightPulse {
+  0%, 100% { opacity: 0.4; width: 40px; }
+  50%      { opacity: 1;   width: 80px; }
 }
 
 #footer .credits {
