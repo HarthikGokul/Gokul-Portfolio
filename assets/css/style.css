@@ -26,8 +26,52 @@ h6 {
 }
 
 /*--------------------------------------------------------------
-# Back to top button
+# Custom Cursor Glow
 --------------------------------------------------------------*/
+#cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid rgba(5, 99, 187, 0.55);
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, opacity 0.3s ease;
+  mix-blend-mode: difference;
+}
+
+#cursor-glow.grow {
+  width: 46px;
+  height: 46px;
+  border-color: rgba(255, 193, 7, 0.8);
+}
+
+@media (max-width: 992px) {
+  #cursor-glow { display: none; }
+}
+
+/*--------------------------------------------------------------
+# Click Ripple Effect
+--------------------------------------------------------------*/
+.ripple-span {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  transform: scale(0);
+  animation: rippleAnim 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes rippleAnim {
+  to {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
 .back-to-top {
   position: fixed;
   visibility: hidden;
@@ -214,6 +258,21 @@ h6 {
 .nav-menu li:hover>a {
   color: #fff;
   background: #0563bb;
+  animation: navActivePop 0.4s ease;
+}
+
+@keyframes navActivePop {
+  0%   { transform: scale(0.9); }
+  60%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+.nav-menu a i {
+  transition: transform 0.3s ease;
+}
+
+.nav-menu a:hover i {
+  transform: translateY(-2px) scale(1.15);
 }
 
 .nav-menu a:hover span,
@@ -255,6 +314,8 @@ h6 {
 
 .mobile-nav-toggle i {
   color: #45505b;
+  display: inline-block;
+  transition: transform 0.45s cubic-bezier(0.68, -0.4, 0.27, 1.4);
 }
 
 .mobile-nav-active {
@@ -268,6 +329,17 @@ h6 {
 .mobile-nav-active .mobile-nav-toggle {
   color: #fff;
   background-color: #0563bb;
+  animation: toggleBtnPop 0.4s ease;
+}
+
+.mobile-nav-active .mobile-nav-toggle i {
+  transform: rotate(180deg) scale(1.1);
+}
+
+@keyframes toggleBtnPop {
+  0%   { transform: scale(0.8); }
+  60%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
 }
 
 /*--------------------------------------------------------------
@@ -336,6 +408,56 @@ h6 {
   50%  { transform: translateY(-50vh) translateX(20px) scale(1.2); }
   90%  { opacity: 1; }
   100% { transform: translateY(-105vh) translateX(-15px) scale(0.7); opacity: 0; }
+}
+
+/* ---- Floating designer symbol icons ---- */
+.hero-symbols {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-symbols .sym {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.55);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.hero-symbols .sym-1  { top: 14%; left: 8%;  font-size: 34px; color: rgba(255,193,7,.6);  animation: symDrift1 9s ease-in-out infinite; }
+.hero-symbols .sym-2  { top: 68%; left: 12%; font-size: 30px; color: rgba(5,99,187,.55);  animation: symDrift2 11s ease-in-out infinite; }
+.hero-symbols .sym-3  { top: 22%; left: 82%; font-size: 32px; animation: symDrift3 8s ease-in-out infinite; }
+.hero-symbols .sym-4  { top: 78%; left: 78%; font-size: 26px; color: rgba(255,193,7,.55); animation: symDrift1 10s ease-in-out infinite 1s; }
+.hero-symbols .sym-5  { top: 40%; left: 4%;  font-size: 28px; color: rgba(5,99,187,.5);   animation: symSpin 14s linear infinite; }
+.hero-symbols .sym-6  { top: 10%; left: 46%; font-size: 24px; animation: symDrift2 9s ease-in-out infinite 0.5s; }
+.hero-symbols .sym-7  { top: 84%; left: 45%; font-size: 22px; color: rgba(255,193,7,.5);  animation: symSpin 18s linear infinite reverse; }
+.hero-symbols .sym-8  { top: 30%; left: 90%; font-size: 26px; color: rgba(5,99,187,.55);  animation: symDrift3 10s ease-in-out infinite 1.2s; }
+.hero-symbols .sym-9  { top: 55%; left: 90%; font-size: 24px; animation: symDrift1 12s ease-in-out infinite 0.8s; }
+.hero-symbols .sym-10 { top: 60%; left: 6%;  font-size: 28px; color: rgba(255,193,7,.45); animation: symDrift2 13s ease-in-out infinite 1.5s; }
+
+@keyframes symDrift1 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.55; }
+  50%      { transform: translate(14px, -22px) rotate(12deg); opacity: 0.9; }
+}
+
+@keyframes symDrift2 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.5; }
+  50%      { transform: translate(-18px, -16px) rotate(-14deg); opacity: 0.85; }
+}
+
+@keyframes symDrift3 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+  50%      { transform: translate(-10px, 18px) scale(1.15); opacity: 0.85; }
+}
+
+@keyframes symSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .hero-symbols .sym { font-size: 18px !important; opacity: 0.4; }
 }
 
 @media (min-width: 992px) {
@@ -603,6 +725,37 @@ section {
   color: #728394;
 }
 
+/* ---- Decorative floating blobs (used inside .about, .skills etc.) ---- */
+.section-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(50px);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  animation: blobDrift 12s ease-in-out infinite;
+}
+
+.section-blob.blob-blue   { background: #0563bb; }
+.section-blob.blob-gold   { background: #ffc107; animation-delay: 2s; }
+.section-blob.blob-teal   { background: #14b8a6; animation-delay: 4s; }
+
+@keyframes blobDrift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(30px, -25px) scale(1.15); }
+  66%      { transform: translate(-25px, 20px) scale(0.9); }
+}
+
+.about, .skills {
+  position: relative;
+  overflow: hidden;
+}
+
+.about > .container, .skills > .container {
+  position: relative;
+  z-index: 1;
+}
+
 .about img.img-fluid {
   border-radius: 12px;
   transition: transform 0.5s ease, box-shadow 0.5s ease;
@@ -777,7 +930,6 @@ section {
   width: 1px;
   height: 10px;
   transition: 0.9s;
-  background-color: #0563bb;
   background: linear-gradient(90deg, #0563bb, #ffc107);
   position: relative;
   overflow: hidden;
@@ -859,7 +1011,6 @@ section {
   border-radius: 50px;
   left: -9px;
   top: 0;
-  background: #fff;
   background: #ffc107;
   border: 2px solid #0563bb;
   box-shadow: 0 0 0 rgba(255, 193, 7, 0.6);
@@ -931,7 +1082,6 @@ section {
 }
 
 .portfolio .portfolio-wrap {
-  transition: 0.3s;
   transition: transform 0.4s ease, box-shadow 0.4s ease;
   position: relative;
   overflow: hidden;
@@ -1363,6 +1513,42 @@ section {
   align-items: center;
   border-radius: 50px;
   transition: all 0.3s ease-in-out;
+  position: relative;
+}
+
+/* Idle micro-animations, unique per icon */
+.contact .info .address i {
+  animation: iconBob 2.6s ease-in-out infinite;
+}
+
+@keyframes iconBob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+
+.contact .info .email i {
+  animation: iconTilt 3s ease-in-out infinite;
+}
+
+@keyframes iconTilt {
+  0%, 100% { transform: rotate(0deg); }
+  25%      { transform: rotate(-10deg); }
+  75%      { transform: rotate(10deg); }
+}
+
+.contact .info .phone i {
+  animation: iconRing 2.4s ease-in-out infinite;
+  transform-origin: 50% 20%;
+}
+
+@keyframes iconRing {
+  0%, 92%, 100% { transform: rotate(0deg); }
+  93%  { transform: rotate(-18deg); }
+  94%  { transform: rotate(16deg); }
+  95%  { transform: rotate(-14deg); }
+  96%  { transform: rotate(10deg); }
+  97%  { transform: rotate(-6deg); }
+  98%  { transform: rotate(0deg); }
 }
 
 .contact .info h4 {
@@ -1390,6 +1576,9 @@ section {
 .contact .info .phone:hover i {
   background: #0563bb;
   color: #fff;
+  transform: scale(1.2) !important;
+  animation-play-state: paused;
+  box-shadow: 0 0 0 8px rgba(5, 99, 187, 0.15);
 }
 
 .contact .php-email-form {
@@ -1499,6 +1688,18 @@ section {
   font-size: 14px;
   text-align: center;
   padding: 30px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+#footer::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath d='M0,20 C200,45 400,-5 600,20 C800,45 1000,-5 1200,20 L1200,0 L0,0 Z' fill='%23000'/%3E%3C/svg%3E") center/cover no-repeat;
 }
 
 #footer h3 {
@@ -1534,12 +1735,58 @@ section {
   width: 36px;
   height: 36px;
   transition: 0.3s;
+  animation: footerIconDrop 0.6s ease backwards;
+}
+
+#footer .social-links a:nth-child(1) { animation-delay: 0.05s; }
+#footer .social-links a:nth-child(2) { animation-delay: 0.15s; }
+#footer .social-links a:nth-child(3) { animation-delay: 0.25s; }
+#footer .social-links a:nth-child(4) { animation-delay: 0.35s; }
+
+@keyframes footerIconDrop {
+  0%   { opacity: 0; transform: translateY(-18px) scale(0.6); }
+  60%  { opacity: 1; transform: translateY(4px) scale(1.08); }
+  100% { transform: translateY(0) scale(1); }
 }
 
 #footer .social-links a:hover {
   background: #0678e3;
   color: #fff;
   text-decoration: none;
+  transform: translateY(-5px) rotate(8deg);
+  box-shadow: 0 8px 18px rgba(5, 99, 187, 0.4);
+}
+
+/* Unique per-platform icon personality */
+#footer .social-links a i {
+  transition: transform 0.4s ease;
+}
+
+#footer .social-links a:hover .bxl-instagram {
+  transform: rotate(-15deg) scale(1.25);
+}
+
+#footer .social-links a:hover .bxl-linkedin {
+  transform: translateY(-3px) scale(1.2);
+}
+
+#footer .social-links a:hover .bxl-behance {
+  animation: iconWiggle 0.6s ease;
+}
+
+@keyframes iconWiggle {
+  0%, 100% { transform: rotate(0); }
+  25%      { transform: rotate(-14deg); }
+  75%      { transform: rotate(14deg); }
+}
+
+#footer .social-links a:hover .bx-world {
+  animation: iconSpin 0.8s linear;
+}
+
+@keyframes iconSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
 #footer .copyright {
@@ -1594,7 +1841,6 @@ section {
   max-height: 100%;
   -webkit-transition: 0 linear left;
   -moz-transition: 0 linear left;
-  transition: 0 linear left;
   transition: transform 0.35s ease, filter 0.35s ease;
   filter: grayscale(100%) opacity(0.7);
   animation: clientLogoFloat 4s ease-in-out infinite;
@@ -1707,11 +1953,16 @@ html.dark-theme #preloader {
 
 /* Theme toggle icon color */
 #theme-toggle-icon {
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
+}
+
+#theme-toggle:hover #theme-toggle-icon {
+  transform: rotate(180deg);
 }
 
 html.dark-theme #theme-toggle-icon {
   color: #ffd166;
+  transform: rotate(360deg);
 }
 
 /*--------------------------------------------------------------
@@ -1938,18 +2189,18 @@ html.dark-theme .chat-msg.bot-msg .msg-bubble {
   padding: 60px 0;
   background: #fff;
 }
-
+ 
 html.dark-theme .carousel-section {
   background: #121212;
 }
-
+ 
 .mbc-carousel {
   position: relative;
   width: 100%;
   overflow: hidden;
   border-radius: 16px;
 }
-
+ 
 .mbc-track {
   display: flex;
   align-items: center;
@@ -1961,11 +2212,11 @@ html.dark-theme .carousel-section {
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
-
+ 
 .mbc-track::-webkit-scrollbar {
   display: none;
 }
-
+ 
 .mbc-item {
   position: relative;
   flex: 0 0 auto;
@@ -1978,32 +2229,32 @@ html.dark-theme .carousel-section {
   transform: scale(0.94);
   transition: opacity 0.45s ease, transform 0.45s ease, width 0.45s ease;
 }
-
+ 
 .mbc-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
-
+ 
 .mbc-item.mbc-large {
   width: 500px;
   opacity: 1;
   transform: scale(1);
 }
-
+ 
 .mbc-item.mbc-medium {
   width: 260px;
   opacity: 0.85;
   transform: scale(0.97);
 }
-
+ 
 .mbc-item.mbc-small {
   width: 120px;
   opacity: 0.4;
   transform: scale(0.92);
 }
-
+ 
 @media (max-width: 768px) {
   .mbc-item {
     height: 320px;
@@ -2019,7 +2270,7 @@ html.dark-theme .carousel-section {
     width: 80px;
   }
 }
-
+ 
 @media (max-width: 480px) {
   .carousel-section {
     padding: 40px 0;
