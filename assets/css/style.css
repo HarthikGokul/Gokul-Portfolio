@@ -1058,6 +1058,35 @@ body, #header, #footer, section {
   }
 }
 
+@media (max-width: 768px) {
+  #hero {
+    height: auto;
+    min-height: 100vh;
+    padding: 100px 0 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start !important;
+  }
+
+  #hero .container {
+    width: 100%;
+    margin: auto 0;
+  }
+
+  .hero-flex {
+    justify-content: center;
+  }
+
+  .hero-mockup-col,
+  .mockup-glow {
+    display: none;
+  }
+
+  .hero-text-col {
+    flex: 1 1 100%;
+  }
+}
+
 /*--------------------------------------------------------------
 # Sections General
 --------------------------------------------------------------*/
