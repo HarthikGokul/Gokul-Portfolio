@@ -1003,11 +1003,20 @@
       var percentEl = document.getElementById('preloaderPercent');
       var pre = document.getElementById('preloader');
       var p = 0;
+      var pageLoaded = false;
+
       var timer = setInterval(function () {
-        p += Math.random() * 18 + 6;
-        if (p >= 100) { p = 100; clearInterval(timer); }
+        var target = pageLoaded ? 100 : 90;
+        if (p < target) {
+          p += Math.random() * 8 + 3;
+          if (p > target) p = target;
+        }
         if (fill) fill.style.width = p + '%';
         if (percentEl) percentEl.textContent = Math.floor(p);
+        if (pageLoaded && p >= 100) {
+          clearInterval(timer);
+          hidePreloader();
+        }
       }, 120);
 
       function hidePreloader() {
@@ -1016,8 +1025,9 @@
         setTimeout(function () { pre.remove(); }, 500);
       }
 
-      window.addEventListener('load', hidePreloader);
-      setTimeout(hidePreloader, 1500);
+      window.addEventListener('load', function () {
+        pageLoaded = true;
+      });
     })();
   </script>
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
