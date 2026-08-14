@@ -13,9 +13,13 @@
   <link href="assets/img/favicon.ico" rel="icon">
   <link href="assets/img/favicon.ico" rel="apple-touch-icon">
 
-  <!-- Google Fonts -->
+  <!-- Preconnect for faster font loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Google Fonts (trimmed weights + swap for faster render) -->
   <link
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|Raleway:400,500,600,700|Poppins:400,500,600&display=swap"
     rel="stylesheet">
 
   <!-- Vendor CSS Files -->
@@ -118,7 +122,11 @@
         </span>
     </a>
 
-    
+        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="hero-video-btn glightbox" data-gallery="hero-video" data-glightbox="type: video">
+          <span class="hero-video-icon"><i class="bx bx-play"></i></span>
+          <span class="hero-video-text">Watch UI/UX<br><small>Showreel</small></span>
+        </a>
+
         </div>
      
     </div>
@@ -448,7 +456,62 @@
     </section>
     <!-- End Resume Section -->
 
-   
+    <!-- ======= UI/UX Multi-Device Mockup Section ======= -->
+    <section id="uiux-mockup" class="uiux-mockup">
+      <div class="section-blob blob-blue" style="width:220px;height:220px; top:-40px; right:-60px;"></div>
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Designs Across Devices</h2>
+          <p>Same UI, adapted for laptop, mobile and TV screens</p>
+        </div>
+
+        <div class="device-showcase">
+
+          <!-- Laptop -->
+          <div class="device device-laptop" data-aos="fade-up" data-aos-delay="100">
+            <div class="device-screen">
+              <div class="device-slider">
+                <img src="assets/img/portfolio/Dashboard 1.png" alt="Dashboard design">
+                <img src="assets/img/portfolio/Dashboard 2.png" alt="Dashboard design">
+                <img src="assets/img/portfolio/Login 1.png" alt="Login design">
+              </div>
+            </div>
+            <div class="laptop-base"></div>
+            <p class="device-label"><i class="bi bi-laptop"></i> Laptop</p>
+          </div>
+
+          <!-- Mobile -->
+          <div class="device device-mobile" data-aos="fade-up" data-aos-delay="250">
+            <div class="device-notch"></div>
+            <div class="device-screen">
+              <div class="device-slider">
+                <img src="assets/img/portfolio/Login 2.png" alt="Login design">
+                <img src="assets/img/portfolio/Login 3.png" alt="Login design">
+                <img src="assets/img/portfolio/Login 4.png" alt="Login design">
+              </div>
+            </div>
+            <p class="device-label"><i class="bi bi-phone"></i> Mobile</p>
+          </div>
+
+          <!-- TV -->
+          <div class="device device-tv" data-aos="fade-up" data-aos-delay="400">
+            <div class="device-screen">
+              <div class="device-slider">
+                <img src="assets/img/portfolio/Chat Bot 1.png" alt="Chat bot design">
+                <img src="assets/img/portfolio/Chat Bot 2.png" alt="Chat bot design">
+                <img src="assets/img/portfolio/Logo 4.png" alt="Logo design" class="bg-white">
+              </div>
+            </div>
+            <div class="tv-stand"></div>
+            <p class="device-label"><i class="bi bi-tv"></i> TV</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+    <!-- End UI/UX Multi-Device Mockup Section -->
 
     <!-- ======= Portfolio Section ======= -->
     <section id="portfolio" class="portfolio section-bg">
@@ -809,64 +872,6 @@
     <!-- End Portfolio Section -->
 
 
-     <!-- ======= UI/UX Multi-Device Mockup Section ======= -->
-    <section id="uiux-mockup" class="uiux-mockup">
-      <div class="section-blob blob-blue" style="width:220px;height:220px; top:-40px; right:-60px;"></div>
-      <div class="container" data-aos="fade-up">
-
-        <div class="section-title">
-          <h2>Designs Across Devices</h2>
-          <p>Same UI, adapted for laptop, mobile and TV screens</p>
-        </div>
-
-        <div class="device-showcase">
-
-          <!-- Laptop -->
-          <div class="device device-laptop" data-aos="fade-up" data-aos-delay="100">
-            <div class="device-screen">
-              <div class="device-slider">
-                <img src="assets/img/portfolio/Dashboard 1.png" alt="Dashboard design">
-                <img src="assets/img/portfolio/Dashboard 2.png" alt="Dashboard design">
-                <img src="assets/img/portfolio/Login 1.png" alt="Login design">
-              </div>
-            </div>
-            <div class="laptop-base"></div>
-            <p class="device-label"><i class="bi bi-laptop"></i> Laptop</p>
-          </div>
-
-          <!-- Mobile -->
-          <div class="device device-mobile" data-aos="fade-up" data-aos-delay="250">
-            <div class="device-notch"></div>
-            <div class="device-screen">
-              <div class="device-slider">
-                <img src="assets/img/portfolio/Login 2.png" alt="Login design">
-                <img src="assets/img/portfolio/Login 3.png" alt="Login design">
-                <img src="assets/img/portfolio/Login 4.png" alt="Login design">
-              </div>
-            </div>
-            <p class="device-label"><i class="bi bi-phone"></i> Mobile</p>
-          </div>
-
-          <!-- TV -->
-          <div class="device device-tv" data-aos="fade-up" data-aos-delay="400">
-            <div class="device-screen">
-              <div class="device-slider">
-                <img src="assets/img/portfolio/Chat Bot 1.png" alt="Chat bot design">
-                <img src="assets/img/portfolio/Chat Bot 2.png" alt="Chat bot design">
-                <img src="assets/img/portfolio/Logo 4.png" alt="Logo design" class="bg-white">
-              </div>
-            </div>
-            <div class="tv-stand"></div>
-            <p class="device-label"><i class="bi bi-tv"></i> TV</p>
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-    <!-- End UI/UX Multi-Device Mockup Section -->
-
-
      <!-- ======= Carousel Section ======= -->
     <section id="carousel" class="carousel-section">
       <div class="container" data-aos="fade-up">
@@ -980,7 +985,41 @@
   </footer>
   <!-- End Footer -->
 
-  <div id="preloader"></div>
+  <div id="preloader">
+    <div class="preloader-inner">
+      <div class="preloader-ring">
+        <span class="preloader-logo">GK</span>
+      </div>
+      <div class="preloader-bar">
+        <div class="preloader-bar-fill" id="preloaderBarFill"></div>
+      </div>
+      <div class="preloader-text">Loading <span id="preloaderPercent">0</span>%</div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var fill = document.getElementById('preloaderBarFill');
+      var percentEl = document.getElementById('preloaderPercent');
+      var pre = document.getElementById('preloader');
+      var p = 0;
+      var timer = setInterval(function () {
+        p += Math.random() * 18 + 6;
+        if (p >= 100) { p = 100; clearInterval(timer); }
+        if (fill) fill.style.width = p + '%';
+        if (percentEl) percentEl.textContent = Math.floor(p);
+      }, 120);
+
+      function hidePreloader() {
+        if (!pre) return;
+        pre.classList.add('preloader-done');
+        setTimeout(function () { pre.remove(); }, 500);
+      }
+
+      window.addEventListener('load', hidePreloader);
+      setTimeout(hidePreloader, 1500);
+    })();
+  </script>
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
       class="bi bi-arrow-up-short"></i></a>
 
@@ -1171,6 +1210,15 @@ document.addEventListener("DOMContentLoaded", function () {
     })();
   </script>
 
+
+  <!-- Hero Video Lightbox Init -->
+  <script>
+    (function () {
+      if (typeof GLightbox === 'function') {
+        GLightbox({ selector: '.hero-video-btn' });
+      }
+    })();
+  </script>
 
   <!-- Custom Cursor + Magnetic Buttons Script -->
   <script>
