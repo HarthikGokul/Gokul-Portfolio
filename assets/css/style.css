@@ -879,6 +879,18 @@ body, #header, #footer, section {
   overflow: hidden;
 }
 
+.uiux-showcase .section-title h2 {
+  color: #fff;
+}
+
+.uiux-showcase .section-title h2::before {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.uiux-showcase .section-title p {
+  color: rgba(255, 255, 255, 0.6);
+}
+
 .uiux-mockups {
   display: flex;
   align-items: flex-end;
@@ -1187,6 +1199,84 @@ body, #header, #footer, section {
 
 @media (max-width: 480px) {
   .mock-slides { height: 200px; }
+}
+
+/* ---- TV mockup ---- */
+.tv-mockup {
+  width: 100%;
+  max-width: 620px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: mockupFloat 5s ease-in-out infinite 0.3s;
+}
+
+.tv-screen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #0b0c10;
+  border: 10px solid #1c1e24;
+  border-radius: 10px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.tv-slides {
+  position: absolute;
+  inset: 0;
+}
+
+.tv-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: #fff;
+  animation: mockSlideCycle 9s ease-in-out infinite;
+}
+
+.tv-slide-1 { animation-delay: 1s; }
+.tv-slide-2 { animation-delay: 4s; }
+.tv-slide-3 { animation-delay: 7s; }
+
+.tv-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: top center;
+}
+
+.tv-glow {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: -30px;
+  height: 40px;
+  background: radial-gradient(ellipse, rgba(255, 193, 7, 0.35), transparent 70%);
+  filter: blur(14px);
+  animation: mockupGlowPulse 4s ease-in-out infinite;
+  z-index: -1;
+}
+
+.tv-stand {
+  width: 10px;
+  height: 26px;
+  background: linear-gradient(180deg, #2c2f37, #1b1d22);
+}
+
+.tv-stand-base {
+  width: 140px;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #2c2f37, #1b1d22);
+}
+
+@media (max-width: 992px) {
+  .tv-mockup { max-width: 380px; }
+  .tv-stand-base { width: 100px; }
 }
 
 #hero h1 {
