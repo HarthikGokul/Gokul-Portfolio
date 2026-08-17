@@ -895,8 +895,8 @@ body, #header, #footer, section {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: 60px;
-  flex-wrap: wrap;
+  gap: 24px;
+  flex-wrap: nowrap;
   margin-top: 40px;
   position: relative;
   z-index: 1;
@@ -1012,8 +1012,9 @@ body, #header, #footer, section {
 /* ---- Laptop mockup ---- */
 .laptop-mockup {
   width: 100%;
-  max-width: 520px;
+  max-width: 280px;
   animation: mockupFloat 5s ease-in-out infinite;
+  flex: 1 1 240px;
 }
 
 .laptop-screen {
@@ -1049,14 +1050,14 @@ body, #header, #footer, section {
 
 .mock-slides {
   position: relative;
-  height: 320px;
+  height: 170px;
 }
 
 .mock-slide {
   position: absolute;
   inset: 0;
   opacity: 0;
-  animation: mockSlideCycle 9s ease-in-out infinite;
+  animation: mockSlideCycle 6s ease-in-out infinite;
   border-radius: 4px;
   overflow: hidden;
   background: #fff;
@@ -1074,8 +1075,8 @@ body, #header, #footer, section {
 }
 
 .mock-slide-1 { animation-delay: 0s; }
-.mock-slide-2 { animation-delay: 3s; }
-.mock-slide-3 { animation-delay: 6s; }
+.mock-slide-2 { animation-delay: 2s; }
+.mock-slide-3 { animation-delay: 4s; }
 
 @keyframes mockSlideCycle {
   0%   { opacity: 0; transform: translateX(12px); }
@@ -1106,15 +1107,16 @@ body, #header, #footer, section {
 
 /* ---- Phone mockup ---- */
 .phone-mockup {
-  width: 220px;
-  height: 440px;
+  width: 130px;
+  height: 260px;
   background: #14161c;
-  border-radius: 34px;
-  border: 6px solid #22252c;
+  border-radius: 22px;
+  border: 5px solid #22252c;
   position: relative;
   box-shadow: 0 25px 55px rgba(0, 0, 0, 0.4);
   animation: mockupFloat 5s ease-in-out infinite 0.6s;
   overflow: hidden;
+  flex: 0 0 auto;
 }
 
 .phone-notch {
@@ -1122,10 +1124,10 @@ body, #header, #footer, section {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 90px;
-  height: 18px;
+  width: 55px;
+  height: 12px;
   background: #22252c;
-  border-radius: 0 0 12px 12px;
+  border-radius: 0 0 8px 8px;
   z-index: 2;
 }
 
@@ -1137,11 +1139,11 @@ body, #header, #footer, section {
 }
 
 .phone-scroll-track {
-  animation: phoneScrollLoop 9s ease-in-out infinite;
+  animation: phoneScrollLoop 6s ease-in-out infinite;
 }
 
 .phone-block {
-  height: 440px;
+  height: 260px;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -1156,8 +1158,8 @@ body, #header, #footer, section {
 
 @keyframes phoneScrollLoop {
   0%,  28%  { transform: translateY(0); }
-  38%, 62%  { transform: translateY(-440px); }
-  72%, 96%  { transform: translateY(-880px); }
+  38%, 62%  { transform: translateY(-260px); }
+  72%, 96%  { transform: translateY(-520px); }
   100%      { transform: translateY(0); }
 }
 
@@ -1184,31 +1186,34 @@ body, #header, #footer, section {
   background: rgba(255, 255, 255, 0.12);
 }
 
-@media (max-width: 992px) {
-  .laptop-mockup { max-width: 380px; }
-  .mock-slides { height: 260px; }
-  .phone-mockup { width: 190px; height: 380px; }
-  .phone-block { height: 380px; }
+@media (max-width: 900px) {
+  .uiux-mockups { flex-wrap: wrap; }
+  .laptop-mockup { max-width: 380px; flex-basis: 100%; }
+  .mock-slides { height: 220px; }
+  .phone-mockup { width: 150px; height: 300px; }
+  .phone-block { height: 300px; }
+  .tv-mockup { max-width: 340px; }
   @keyframes phoneScrollLoop {
     0%,  28%  { transform: translateY(0); }
-    38%, 62%  { transform: translateY(-380px); }
-    72%, 96%  { transform: translateY(-760px); }
+    38%, 62%  { transform: translateY(-300px); }
+    72%, 96%  { transform: translateY(-600px); }
     100%      { transform: translateY(0); }
   }
 }
 
 @media (max-width: 480px) {
-  .mock-slides { height: 200px; }
+  .mock-slides { height: 170px; }
 }
 
 /* ---- TV mockup ---- */
 .tv-mockup {
   width: 100%;
-  max-width: 620px;
+  max-width: 300px;
   display: flex;
   flex-direction: column;
   align-items: center;
   animation: mockupFloat 5s ease-in-out infinite 0.3s;
+  flex: 1 1 260px;
 }
 
 .tv-screen {
@@ -1235,12 +1240,12 @@ body, #header, #footer, section {
   align-items: flex-start;
   justify-content: center;
   background: #fff;
-  animation: mockSlideCycle 9s ease-in-out infinite;
+  animation: mockSlideCycle 6s ease-in-out infinite;
 }
 
-.tv-slide-1 { animation-delay: 1s; }
-.tv-slide-2 { animation-delay: 4s; }
-.tv-slide-3 { animation-delay: 7s; }
+.tv-slide-1 { animation-delay: 0.7s; }
+.tv-slide-2 { animation-delay: 2.7s; }
+.tv-slide-3 { animation-delay: 4.7s; }
 
 .tv-slide img {
   width: 100%;
