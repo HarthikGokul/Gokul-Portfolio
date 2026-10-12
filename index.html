@@ -6,16 +6,24 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
   <title>Gokul Portfolio</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+  <meta content="Gokulakannan M - Web Designer & Developer. UI/UX design, responsive websites, dashboards and app screens portfolio." name="description">
+  <meta content="Gokulakannan, web designer, UI UX designer, web developer, portfolio, Chennai" name="keywords">
+  <meta name="theme-color" content="#0563bb">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Gokulakannan M - Web Designer & Developer">
+  <meta property="og:description" content="UI/UX design, responsive websites and app screens portfolio.">
+  <meta property="og:image" content="assets/img/hero-bg.png">
 
   <!-- Favicons -->
   <link href="assets/img/favicon.ico" rel="icon">
   <link href="assets/img/favicon.ico" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="image" href="assets/img/hero-bg.png">
   <link
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|Raleway:400,500,600,700|Poppins:400,500,600,700&display=swap"
     rel="stylesheet">
 
   <!-- Vendor CSS Files -->
@@ -28,10 +36,14 @@
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
+  <link href="assets/css/admin.css" rel="stylesheet">
 
 </head>
 
 <body oncontextmenu="return false;">
+
+  <!-- WhatsApp quick contact -->
+  <a href="https://wa.me/918124112115?text=Hi%20Gokul%2C%20I%20saw%20your%20portfolio" target="_blank" rel="noopener" class="whatsapp-float" aria-label="Chat on WhatsApp"><i class="bi bi-whatsapp"></i></a>
 
   <!-- Scroll progress bar -->
   <div id="scroll-progress"></div>
@@ -49,13 +61,20 @@
       <ul>
         <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Home</span></a></li>
         <li><a href="#about" class="nav-link scrollto"><i class="bx bx-user"></i> <span>About</span></a></li>
+        <li><a href="#services" class="nav-link scrollto"><i class="bx bx-briefcase-alt-2"></i> <span>Services</span></a></li>
         <li><a href="#resume" class="nav-link scrollto"><i class="bx bx-file-blank"></i> <span>Resume</span></a></li>
+        <li><a href="#uiux-showcase" class="nav-link scrollto"><i class="bx bx-devices"></i> <span>UI/UX</span></a></li>
         <li><a href="#portfolio" class="nav-link scrollto"><i class="bx bx-book-content"></i> <span>Projects</span></a>
         </li>
         <li><a href="#contact" class="nav-link scrollto"><i class="bx bx-envelope"></i> <span>Contact</span></a></li>
         <li>
           <a href="#" id="theme-toggle" class="nav-link" title="Toggle dark/light theme">
             <i class="bx bx-moon" id="theme-toggle-icon"></i> <span>Theme</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" id="adminSignInLink" class="nav-link" title="Admin sign in">
+            <i class="bx bx-lock-alt"></i> <span>Sign in</span>
           </a>
         </li>
       </ul>
@@ -109,8 +128,8 @@
 
     <div class="container hero-flex" data-aos="zoom-in" data-aos-delay="100">
       <div class="hero-text-col">
-        <h1 class="text-white">GOKULAKANNAN M</h1>
-        <p><span class="typed text-warning " data-typed-items="Web Designer & Developer"></span></p>
+        <h1 class="text-white" data-cms="hero.name">GOKULAKANNAN M</h1>
+        <p><span class="typed text-warning " data-typed-items="Web Designer & Developer" data-cms="hero.role" data-cms-attr="data-typed-items" data-cms-textless="1"></span></p>
         <div class="social-links">
 
           <a href="assets/img/GOKUL_CV.pdf" target="_blank" class="theme-btn btn-style-one" download>
@@ -139,7 +158,7 @@
             <span class="browser-mockup-url">gokulakannan.design</span>
           </div>
           <div class="browser-mockup-screen">
-            <video autoplay muted loop playsinline>
+            <video id="heroMockupVideo" muted loop playsinline preload="none">
               <source src="https://assets.mixkit.co/videos/13232/13232-360.mp4" type="video/mp4">
             </video>
           </div>
@@ -213,32 +232,32 @@
 
         <div class="row">
           <div class="col-lg-4">
-             <img src="assets/img/profile-img.jpg" class="img-fluid" alt="">
+             <img data-cms-img="about.photo" src="assets/img/profile-img.jpg" class="img-fluid" alt="" loading="lazy" decoding="async">
           </div>
           <div class="col-lg-8 pt-4 pt-lg-0 content">
-            <h3>Web Designer & Developer</h3>
-            <p class="fst-italic">
+            <h3 data-cms="about.heading">Web Designer & Developer</h3>
+            <p class="fst-italic" data-cms="about.intro">
               Eager to contribute my skills and contribute to the success of forward-thinking projects.
             </p>
             <div class="row">
               <div class="col-lg-6">
                 <ul>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Birthday:</strong> <span>June 27 1999</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Phone:</strong> <span>+91 8124112115</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>City:</strong> <span>Chennai , India</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Birthday:</strong> <span data-cms="about.birthday">June 27 1999</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Phone:</strong> <span data-cms="about.phone">+91 8124112115</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>City:</strong> <span data-cms="about.city">Chennai , India</span></li>
                 </ul>
               </div>
               <div class="col-lg-6">
                 <ul>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Age:</strong> <span>24</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Degree:</strong> <span>Bachelor's of Computer
+                  <li><i class="bi bi-chevron-right"></i> <strong>Age:</strong> <span data-cms="about.age">24</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Degree:</strong> <span data-cms="about.degree">Bachelor's of Computer
                       Application</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong> <span>harthikgokul@gmail.com</span>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong> <span data-cms="about.email">harthikgokul@gmail.com</span>
                   </li>
                 </ul>
               </div>
             </div>
-            <p style="text-align: justify;">
+            <p style="text-align: justify;" data-cms="about.summary">
               Creative and detail-oriented web designer in conceptualizing and implementing innovative design solutions
               for diverse clients.
               Proficient in translating client goals and brand aesthetics into effective and visually appealing web
@@ -267,32 +286,32 @@
           <div class="col-lg-3 col-md-3 col-sm-3  d-flex flex-column align-items-center">
             <i class="bi bi-emoji-smile"></i>
             <div class="stats-item">
-              <span data-purecounter-start="0" data-purecounter-end="5" data-purecounter-duration="2" class="purecounter text-warning" >5</span>
-              <p class="text-white" >Happy Clients</p>
+              <span data-purecounter-start="0" data-purecounter-end="5" data-purecounter-duration="2" data-cms="stats.1.value" data-cms-attr="data-purecounter-end" class="purecounter text-warning" >5</span>
+              <p data-cms="stats.1.label" class="text-white" >Happy Clients</p>
             </div>
           </div><!-- End Stats Item -->
 
           <div class="col-lg-3 col-md-3 col-sm-3 d-flex flex-column align-items-center">
             <i class="bi bi-journal-richtext"></i>
             <div class="stats-item">
-              <span data-purecounter-start="0" data-purecounter-end="18" data-purecounter-duration="2" class="purecounter text-warning">18</span>
-              <p class="text-white">Projects</p>
+              <span data-purecounter-start="0" data-purecounter-end="18" data-purecounter-duration="2" data-cms="stats.2.value" data-cms-attr="data-purecounter-end" class="purecounter text-warning">18</span>
+              <p data-cms="stats.2.label" class="text-white">Projects</p>
             </div>
           </div><!-- End Stats Item -->
 
           <div class="col-lg-3 col-md-3 col-sm-3 d-flex flex-column align-items-center">
             <i class="bi bi-headset"></i>
             <div class="stats-item">
-              <span data-purecounter-start="0" data-purecounter-end="4" data-purecounter-duration="2" class="purecounter text-warning">4</span>
-              <p class="text-white">Years Of Support</p>
+              <span data-purecounter-start="0" data-purecounter-end="4" data-purecounter-duration="2" data-cms="stats.3.value" data-cms-attr="data-purecounter-end" class="purecounter text-warning">4</span>
+              <p data-cms="stats.3.label" class="text-white">Years Of Support</p>
             </div>
           </div><!-- End Stats Item -->
 
           <div class="col-lg-3 col-md-3 col-sm-3 d-flex flex-column align-items-center">
             <i class="bi bi-people"></i>
             <div class="stats-item">
-              <span data-purecounter-start="0" data-purecounter-end="10" data-purecounter-duration="2" class="purecounter text-warning">10</span>
-              <p class="text-white">Hard Workers</p>
+              <span data-purecounter-start="0" data-purecounter-end="10" data-purecounter-duration="2" data-cms="stats.4.value" data-cms-attr="data-purecounter-end" class="purecounter text-warning">10</span>
+              <p data-cms="stats.4.label" class="text-white">Hard Workers</p>
             </div>
           </div><!-- End Stats Item -->
 
@@ -303,6 +322,60 @@
     </section>
 
     <!-- ======= Skills Section ======= -->
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="services">
+      <div class="container" data-aos="fade-up">
+        <div class="section-title">
+          <h2>What I Do</h2>
+          <p data-cms="services.1.text">Design that looks great and code that works everywhere</p>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="50">
+            <div class="service-card">
+              <span class="service-num">01</span>
+              <div class="service-icon"><i class="bi bi-vector-pen"></i></div>
+              <h4 data-cms="services.1.title">UI / UX Design</h4>
+              <p data-cms="services.2.text">Clean, user-friendly interfaces planned around how people actually use them.</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="150">
+            <div class="service-card">
+              <span class="service-num">02</span>
+              <div class="service-icon"><i class="bi bi-window-desktop"></i></div>
+              <h4 data-cms="services.2.title">Responsive Websites</h4>
+              <p data-cms="services.3.text">Fast, mobile-friendly sites built with HTML, CSS, Bootstrap and JavaScript.</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="250">
+            <div class="service-card">
+              <span class="service-num">03</span>
+              <div class="service-icon"><i class="bi bi-speedometer2"></i></div>
+              <h4 data-cms="services.3.title">Dashboards &amp; Apps</h4>
+              <p data-cms="services.4.text">Login screens, dashboards and chatbot interfaces designed for real products.</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="350">
+            <div class="service-card">
+              <span class="service-num">04</span>
+              <div class="service-icon"><i class="bi bi-brush"></i></div>
+              <h4 data-cms="services.4.title">Logo &amp; Branding</h4>
+              <p>Memorable logos and graphics created with Illustrator, Photoshop and Inkscape.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tech stack marquee -->
+      <div class="tech-marquee" aria-label="Tools and technologies">
+        <div class="tech-track">
+          <div class="tech-set"><span class="tech-chip"><i class="bi bi-filetype-html"></i> HTML</span><span class="tech-chip"><i class="bi bi-filetype-css"></i> CSS</span><span class="tech-chip"><i class="bi bi-bootstrap"></i> Bootstrap</span><span class="tech-chip"><i class="bi bi-filetype-js"></i> JavaScript</span><span class="tech-chip"><i class="bi bi-code-slash"></i> TypeScript</span><span class="tech-chip"><i class="bi bi-vector-pen"></i> Illustrator</span><span class="tech-chip"><i class="bi bi-brush"></i> Photoshop</span><span class="tech-chip"><i class="bi bi-palette2"></i> Inkscape</span></div>
+          <div class="tech-set" aria-hidden="true"><span class="tech-chip"><i class="bi bi-filetype-html"></i> HTML</span><span class="tech-chip"><i class="bi bi-filetype-css"></i> CSS</span><span class="tech-chip"><i class="bi bi-bootstrap"></i> Bootstrap</span><span class="tech-chip"><i class="bi bi-filetype-js"></i> JavaScript</span><span class="tech-chip"><i class="bi bi-code-slash"></i> TypeScript</span><span class="tech-chip"><i class="bi bi-vector-pen"></i> Illustrator</span><span class="tech-chip"><i class="bi bi-brush"></i> Photoshop</span><span class="tech-chip"><i class="bi bi-palette2"></i> Inkscape</span></div>
+        </div>
+      </div>
+    </section>
+    <!-- End Services Section -->
+
     <section id="skills" class="skills section-bg">
       <div class="section-blob blob-teal" style="width:240px;height:240px; top:-40px; right:-60px;"></div>
       <div class="section-blob blob-blue" style="width:200px;height:200px; bottom:-40px; left:-50px;"></div>
@@ -515,7 +588,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-app">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Login 1.png" class="img-fluid" alt="">
+              <img src="assets/img/portfolio/Login 1.png" class="img-fluid" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>CRM Website</h4>
                 <p>Landing Page</p>
@@ -531,7 +604,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-web">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Logo 2.png" class="img-fluid bg-white" alt="">
+              <img src="assets/img/portfolio/Logo 2.png" class="img-fluid bg-white" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>Nohitatu Website</h4>
                 <p>Comapny Site</p>
@@ -547,7 +620,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-app">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Login 2.png" class="img-fluid" alt="">
+              <img src="assets/img/portfolio/Login 2.png" class="img-fluid" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>Fido Academy </h4>
                 <p>Trading Academy Website</p>
@@ -564,7 +637,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-app">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Dashboard 1.png" class="img-fluid" alt="">
+              <img src="assets/img/portfolio/Dashboard 1.png" class="img-fluid" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>Dojoman</h4>
                 <p>Event Website</p>
@@ -580,7 +653,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-web">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Logo 1.png" class="img-fluid bg-white" alt="">
+              <img src="assets/img/portfolio/Logo 1.png" class="img-fluid bg-white" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>Karate Website</h4>
                 <p>Academy</p>
@@ -596,7 +669,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-web">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Logo 4.png" class="img-fluid bg-white" alt="">
+              <img src="assets/img/portfolio/Logo 4.png" class="img-fluid bg-white" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>KNCCI</h4>
                 <p>College Website</p>
@@ -613,7 +686,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-app">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Login 3.png" class="img-fluid" alt="">
+              <img src="assets/img/portfolio/Login 3.png" class="img-fluid" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>Zontia Website</h4>
                 <p>Real Estate</p>
@@ -629,7 +702,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-app">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Login 4.png" class="img-fluid" alt="">
+              <img src="assets/img/portfolio/Login 4.png" class="img-fluid" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>HRMS Website</h4>
                 <p>Landing Page</p>
@@ -645,7 +718,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-app">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Chat Bot 1.png" class="img-fluid" alt="">
+              <img src="assets/img/portfolio/Chat Bot 1.png" class="img-fluid" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>Task Mangement</h4>
                 <p>landing Page</p>
@@ -659,7 +732,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-card">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Dashboard 2.png" class="img-fluid" alt="">
+              <img src="assets/img/portfolio/Dashboard 2.png" class="img-fluid" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>Bosstro CRM</h4>
                 <p>Dashboard</p>
@@ -675,7 +748,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-app">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Chat Bot 2.png" class="img-fluid" alt="">
+              <img src="assets/img/portfolio/Chat Bot 2.png" class="img-fluid" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>Karate Academy</h4>
                 <p>Academy</p>
@@ -691,7 +764,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-app">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Login 5.png" class="img-fluid" alt="">
+              <img src="assets/img/portfolio/Login 5.png" class="img-fluid" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>Food Website</h4>
                 <p>My Product Design</p>
@@ -707,7 +780,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-app">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Chat Bot 4.png" class="img-fluid" alt="">
+              <img src="assets/img/portfolio/Chat Bot 4.png" class="img-fluid" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>Asset Management</h4>
                 <p>Asset Mangement</p>
@@ -722,7 +795,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-chat">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Chat Bot 3.png" class="img-fluid" alt="">
+              <img src="assets/img/portfolio/Chat Bot 3.png" class="img-fluid" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>Fido Markets</h4>
                 <p>Market Posters</p>
@@ -738,7 +811,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-chat">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/meta.png" class="img-fluid" alt="">
+              <img src="assets/img/portfolio/meta.png" class="img-fluid" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>Fido Meta </h4>
                 <p>Meta Posters</p>
@@ -755,7 +828,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-chat">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Academy.png" class="img-fluid" alt="">
+              <img src="assets/img/portfolio/Academy.png" class="img-fluid" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>Fido Academy</h4>
                 <p>Academy Posters</p>
@@ -772,7 +845,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-chat">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Ziona.png" class="img-fluid" alt="">
+              <img src="assets/img/portfolio/Ziona.png" class="img-fluid" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>Ziona Holdings</h4>
                 <p>Ziona Posters</p>
@@ -788,7 +861,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-card">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Dashboard 3.png" class="img-fluid" alt="">
+              <img src="assets/img/portfolio/Dashboard 3.png" class="img-fluid" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>HRMS</h4>
                 <p>Dashboard</p>
@@ -802,7 +875,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-web">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Logo 3.png" class="img-fluid bg-white" alt="">
+              <img src="assets/img/portfolio/Logo 3.png" class="img-fluid bg-white" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>Image 4</h4>
                 <p>Image</p>
@@ -816,7 +889,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-card">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Dashboard 4.png" class="img-fluid" alt="">
+              <img src="assets/img/portfolio/Dashboard 4.png" class="img-fluid" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>Dashboard 3</h4>
                 <p>Dashboard</p>
@@ -831,7 +904,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-card">
             <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/Dashboard 5.png" class="img-fluid" alt="">
+              <img src="assets/img/portfolio/Dashboard 5.png" class="img-fluid" alt="" loading="lazy" decoding="async">
               <div class="portfolio-info">
                 <h4>Real Estate</h4>
                 <p>Dashboard</p>
@@ -871,13 +944,13 @@
               </div>
               <div class="mock-slides">
                 <div class="mock-slide mock-slide-1">
-                  <img src="assets/img/portfolio/Dashboard 1.png" alt="Dashboard design" loading="lazy">
+                  <img data-cms-img="showcase.laptop1" src="assets/img/portfolio/Dashboard 1.png" alt="Dashboard design" loading="lazy" decoding="async">
                 </div>
                 <div class="mock-slide mock-slide-2">
-                  <img src="assets/img/portfolio/Dashboard 2.png" alt="Dashboard design 2" loading="lazy">
+                  <img data-cms-img="showcase.laptop2" src="assets/img/portfolio/Dashboard 2.png" alt="Dashboard design 2" loading="lazy" decoding="async">
                 </div>
                 <div class="mock-slide mock-slide-3">
-                  <img src="assets/img/portfolio/Login 1.png" alt="Login screen design" loading="lazy">
+                  <img data-cms-img="showcase.laptop3" src="assets/img/portfolio/Login 1.png" alt="Login screen design" loading="lazy" decoding="async">
                 </div>
               </div>
             </div>
@@ -890,13 +963,13 @@
             <div class="phone-screen">
               <div class="phone-scroll-track">
                 <div class="phone-block">
-                  <img src="assets/img/portfolio/Login 2.png" alt="Login app screen" loading="lazy">
+                  <img data-cms-img="showcase.phone1" src="assets/img/portfolio/Login 2.png" alt="Login app screen" loading="lazy" decoding="async">
                 </div>
                 <div class="phone-block">
-                  <img src="assets/img/portfolio/Chat Bot 1.png" alt="Chat bot app screen" loading="lazy">
+                  <img data-cms-img="showcase.phone2" src="assets/img/portfolio/Chat Bot 1.png" alt="Chat bot app screen" loading="lazy" decoding="async">
                 </div>
                 <div class="phone-block">
-                  <img src="assets/img/portfolio/Chat Bot 2.png" alt="Chat bot app screen 2" loading="lazy">
+                  <img data-cms-img="showcase.phone3" src="assets/img/portfolio/Chat Bot 2.png" alt="Chat bot app screen 2" loading="lazy" decoding="async">
                 </div>
               </div>
             </div>
@@ -907,13 +980,13 @@
             <div class="tv-screen">
               <div class="tv-slides">
                 <div class="tv-slide tv-slide-1">
-                  <img src="assets/img/portfolio/Dashboard 3.png" alt="Dashboard TV screen" loading="lazy">
+                  <img data-cms-img="showcase.tv1" src="assets/img/portfolio/Dashboard 3.png" alt="Dashboard TV screen" loading="lazy" decoding="async">
                 </div>
                 <div class="tv-slide tv-slide-2">
-                  <img src="assets/img/portfolio/Dashboard 4.png" alt="Dashboard TV screen 2" loading="lazy">
+                  <img data-cms-img="showcase.tv2" src="assets/img/portfolio/Dashboard 4.png" alt="Dashboard TV screen 2" loading="lazy" decoding="async">
                 </div>
                 <div class="tv-slide tv-slide-3">
-                  <img src="assets/img/portfolio/Login 3.png" alt="Login TV screen" loading="lazy">
+                  <img data-cms-img="showcase.tv3" src="assets/img/portfolio/Login 3.png" alt="Login TV screen" loading="lazy" decoding="async">
                 </div>
               </div>
               <div class="tv-glow"></div>
@@ -935,21 +1008,21 @@
         </div>
         <div class="mbc-carousel" id="mbcCarousel">
           <div class="mbc-track" id="mbcTrack">
-            <div class="mbc-item" data-index="0"><img src="assets/img/portfolio/Chat Bot 3.png" alt="Gallery image 1" loading="lazy"></div>
-            <div class="mbc-item" data-index="1"><img src="assets/img/portfolio/Ziona.png" alt="Gallery image 2" loading="lazy"></div>
-            <div class="mbc-item" data-index="2"><img src="assets/img/portfolio/Academy.png" alt="Gallery image 3" loading="lazy"></div>
-            <div class="mbc-item" data-index="3"><img src="assets/img/portfolio/meta.png" alt="Gallery image 4" loading="lazy"></div>
-            <div class="mbc-item" data-index="4"><img src="assets/img/portfolio/Login 4.png" alt="Gallery image 5" loading="lazy"></div>
-            <div class="mbc-item" data-index="5"><img src="assets/img/portfolio/Chat Bot 3.png" alt="Gallery image 6" loading="lazy"></div>
-            <div class="mbc-item" data-index="6"><img src="assets/img/portfolio/Academy.png" alt="Gallery image 7" loading="lazy"></div>
-            <div class="mbc-item" data-index="7"><img src="assets/img/portfolio/meta.png" alt="Gallery image 8" loading="lazy"></div>
-            <div class="mbc-item" data-index="8"><img src="assets/img/portfolio/Login 4.png" alt="Gallery image 9" loading="lazy"></div>
-            <div class="mbc-item" data-index="9"><img src="assets/img/portfolio/Ziona.png" alt="Gallery image 10" loading="lazy"></div>
-            <div class="mbc-item" data-index="10"><img src="assets/img/portfolio/meta.png" alt="Gallery image 11" loading="lazy"></div>
-            <div class="mbc-item" data-index="11"><img src="assets/img/portfolio/Academy.png" alt="Gallery image 12" loading="lazy"></div>
-            <div class="mbc-item" data-index="12"><img src="hassets/img/portfolio/Chat Bot 3.png" alt="Gallery image 13"></div>
-            <div class="mbc-item" data-index="13"><img src="assets/img/portfolio/meta.png" alt="Gallery image 14" loading="lazy"></div>
-            <div class="mbc-item" data-index="14"><img src="assets/img/portfolio/Academy.png" alt="Gallery image 15" loading="lazy"></div>
+            <div class="mbc-item" data-index="0"><img src="assets/img/portfolio/Chat Bot 3.png" alt="Gallery image 1" loading="lazy" decoding="async"></div>
+            <div class="mbc-item" data-index="1"><img src="assets/img/portfolio/Ziona.png" alt="Gallery image 2" loading="lazy" decoding="async"></div>
+            <div class="mbc-item" data-index="2"><img src="assets/img/portfolio/Academy.png" alt="Gallery image 3" loading="lazy" decoding="async"></div>
+            <div class="mbc-item" data-index="3"><img src="assets/img/portfolio/meta.png" alt="Gallery image 4" loading="lazy" decoding="async"></div>
+            <div class="mbc-item" data-index="4"><img src="assets/img/portfolio/Login 4.png" alt="Gallery image 5" loading="lazy" decoding="async"></div>
+            <div class="mbc-item" data-index="5"><img src="assets/img/portfolio/Chat Bot 3.png" alt="Gallery image 6" loading="lazy" decoding="async"></div>
+            <div class="mbc-item" data-index="6"><img src="assets/img/portfolio/Academy.png" alt="Gallery image 7" loading="lazy" decoding="async"></div>
+            <div class="mbc-item" data-index="7"><img src="assets/img/portfolio/meta.png" alt="Gallery image 8" loading="lazy" decoding="async"></div>
+            <div class="mbc-item" data-index="8"><img src="assets/img/portfolio/Login 4.png" alt="Gallery image 9" loading="lazy" decoding="async"></div>
+            <div class="mbc-item" data-index="9"><img src="assets/img/portfolio/Ziona.png" alt="Gallery image 10" loading="lazy" decoding="async"></div>
+            <div class="mbc-item" data-index="10"><img src="assets/img/portfolio/meta.png" alt="Gallery image 11" loading="lazy" decoding="async"></div>
+            <div class="mbc-item" data-index="11"><img src="assets/img/portfolio/Academy.png" alt="Gallery image 12" loading="lazy" decoding="async"></div>
+            <div class="mbc-item" data-index="12"><img src="hassets/img/portfolio/Chat Bot 3.png" alt="Gallery image 13" loading="lazy" decoding="async"></div>
+            <div class="mbc-item" data-index="13"><img src="assets/img/portfolio/meta.png" alt="Gallery image 14" loading="lazy" decoding="async"></div>
+            <div class="mbc-item" data-index="14"><img src="assets/img/portfolio/Academy.png" alt="Gallery image 15" loading="lazy" decoding="async"></div>
           </div>
         </div>
       </div>
@@ -969,7 +1042,7 @@
         <div class="row mt-1">
           <div class="col-lg-7 col-md-7 mt-lg-0 d-flex justify-content-start">
             <div class="contact-img">
-              <img src="assets/img/Contact.jpg" style="width: 80%; height: auto;">
+              <img src="assets/img/Contact.jpg" style="width: 80%; height: auto;" loading="lazy" decoding="async">
             </div>
           </div>
           <div class="col-lg-4 col-md-4 mt-xl-5 mt-lg-5">
@@ -977,22 +1050,47 @@
               <div class="address">
                 <i class="bi bi-geo-alt"></i>
                 <h4>Location:</h4>
-                <p>4/56 yadava Street, T.U.managi , Ramnad - 623533</p>
+                <p data-cms="contact.address">4/56 yadava Street, T.U.managi , Ramnad - 623533</p>
               </div>
 
               <div class="email">
                 <i class="bi bi-envelope"></i>
                 <h4>Email:</h4>
-                <p><a href="mailto:harthikgokul@gmail.com">harthikgokul@gmail.com</a> </p>
+                <p><a href="mailto:harthikgokul@gmail.com" data-cms="contact.email" data-cms-href-prefix="mailto:">harthikgokul@gmail.com</a> </p>
               </div>
 
               <div class="phone">
                 <i class="bi bi-phone"></i>
                 <h4>Call:</h4>
-                <p>+91 8124112115</p>
+                <p data-cms="contact.phone">+91 8124112115</p>
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- Quick message form (opens WhatsApp / Email, no backend needed) -->
+        <div class="quick-contact" data-aos="fade-up">
+          <h3>Let's work together</h3>
+          <p>Tell me about your project — I'll reply as soon as possible.</p>
+          <div class="qc-grid">
+            <div class="qc-field">
+              <input type="text" id="qcName" placeholder=" " autocomplete="name">
+              <label for="qcName">Your name</label>
+            </div>
+            <div class="qc-field">
+              <input type="email" id="qcEmail" placeholder=" " autocomplete="email">
+              <label for="qcEmail">Your email</label>
+            </div>
+            <div class="qc-field qc-full">
+              <textarea id="qcMsg" rows="4" placeholder=" "></textarea>
+              <label for="qcMsg">Project details</label>
+            </div>
+          </div>
+          <div class="qc-actions">
+            <button type="button" id="qcWhatsapp" class="qc-btn qc-btn-wa"><i class="bi bi-whatsapp"></i> Send on WhatsApp</button>
+            <button type="button" id="qcEmailBtn" class="qc-btn qc-btn-mail"><i class="bi bi-envelope"></i> Send by Email</button>
+          </div>
+          <div class="qc-note" id="qcNote" role="status"></div>
         </div>
       </div>
     </section>
@@ -1039,7 +1137,8 @@
   </footer>
   <!-- End Footer -->
 
-  <div id="preloader"><span id="preloader-text">Loading</span></div>
+  <div id="preloader"><span id="preloader-name">GOKULAKANNAN M</span><span id="preloader-text">Loading</span></div>
+  <script>document.body.classList.add('pre-reveal');</script>
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
       class="bi bi-arrow-up-short"></i></a>
 
@@ -1109,6 +1208,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <script src="assets/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS File -->
+  <script src="assets/js/admin.js"></script>
   <script src="assets/js/main.js"></script>
 
   <!-- Theme Toggle Script -->
@@ -1243,14 +1343,29 @@ document.addEventListener("DOMContentLoaded", function () {
         mouseY = e.clientY;
       });
 
+      let cursorRunning = false;
       function animateCursor() {
         curX += (mouseX - curX) * 0.18;
         curY += (mouseY - curY) * 0.18;
         cursor.style.left = curX + 'px';
         cursor.style.top = curY + 'px';
-        requestAnimationFrame(animateCursor);
+        if (Math.abs(mouseX - curX) > 0.3 || Math.abs(mouseY - curY) > 0.3) {
+          requestAnimationFrame(animateCursor);
+        } else {
+          cursorRunning = false;
+        }
       }
-      animateCursor();
+      window.addEventListener('mousemove', function () {
+        if (!cursorRunning) { cursorRunning = true; requestAnimationFrame(animateCursor); }
+      });
+
+      // Pause hero animations when hero is off-screen (saves CPU/battery)
+      const heroForPerf = document.getElementById('hero');
+      if (heroForPerf && 'IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          heroForPerf.classList.toggle('hero-offscreen', !entries[0].isIntersecting);
+        }, { threshold: 0 }).observe(heroForPerf);
+      }
 
       const growTargets = document.querySelectorAll('a, button, .theme-btn, .portfolio-wrap, .nav-menu a');
       growTargets.forEach(function (el) {
@@ -1274,6 +1389,82 @@ document.addEventListener("DOMContentLoaded", function () {
     })();
   </script>
 
+    <!-- Quick contact form script -->
+  <script>
+    (function () {
+      var name = document.getElementById('qcName');
+      var email = document.getElementById('qcEmail');
+      var msg = document.getElementById('qcMsg');
+      var note = document.getElementById('qcNote');
+      if (!name || !msg) return;
+
+      function build() {
+        var n = name.value.trim(), e = email.value.trim(), m = msg.value.trim();
+        if (!n || !m) {
+          note.textContent = 'Please enter your name and project details.';
+          note.className = 'qc-note qc-error';
+          return null;
+        }
+        note.textContent = '';
+        note.className = 'qc-note';
+        return 'Hi Gokul, I am ' + n + (e ? ' (' + e + ')' : '') + '.\n\n' + m;
+      }
+
+      document.getElementById('qcWhatsapp').addEventListener('click', function () {
+        var text = build();
+        if (!text) return;
+        window.open('https://wa.me/918124112115?text=' + encodeURIComponent(text), '_blank', 'noopener');
+        note.textContent = 'Opening WhatsApp...';
+        note.className = 'qc-note qc-ok';
+      });
+
+      document.getElementById('qcEmailBtn').addEventListener('click', function () {
+        var text = build();
+        if (!text) return;
+        window.location.href = 'mailto:harthikgokul@gmail.com?subject=' +
+          encodeURIComponent('Portfolio enquiry from ' + name.value.trim()) +
+          '&body=' + encodeURIComponent(text);
+        note.textContent = 'Opening your email app...';
+        note.className = 'qc-note qc-ok';
+      });
+    })();
+  </script>
+
+  <!-- Preloader 5s timing + scroll reveal -->
+  <script>
+    (function () {
+      var PRELOAD_MS = 2000;
+      var startTime = Date.now();
+
+      function revealPage() {
+        var preloader = document.getElementById('preloader');
+        if (preloader) {
+          preloader.classList.add('preloader-hide');
+          setTimeout(function () {
+            if (preloader && preloader.parentNode) {
+              preloader.style.display = 'none';
+            }
+          }, 900);
+        }
+        document.body.classList.remove('pre-reveal');
+        document.body.classList.add('page-ready');
+        document.body.style.overflow = '';
+      }
+
+      // Lock scroll while preloader is showing
+      document.body.style.overflow = 'hidden';
+
+      window.addEventListener('load', function () {
+        var elapsed = Date.now() - startTime;
+        var remaining = Math.max(PRELOAD_MS - elapsed, 0);
+        setTimeout(revealPage, remaining);
+      });
+
+      // Absolute fallback in case 'load' never fires
+      setTimeout(revealPage, PRELOAD_MS + 3000);
+    })();
+  </script>
+
   <!-- Ripple + 3D Tilt Script -->
   <script>
     (function () {
@@ -1293,6 +1484,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Cursor sparkle trail
       let lastSparkle = 0;
       window.addEventListener('mousemove', function (e) {
+        if (window.matchMedia('(pointer: coarse)').matches) return;
         const now = Date.now();
         if (now - lastSparkle < 60) return;
         lastSparkle = now;
@@ -1319,29 +1511,26 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       }
 
-      // Intro video modal
+      // Play button: show banner video mockup only on click
       const playBtn = document.querySelector('.hero-play-btn');
-      const videoModal = document.getElementById('introVideoModal');
-      const videoFrame = document.getElementById('introVideoFrame');
-      if (playBtn && videoModal && videoFrame) {
-        const closeVideoModal = function () {
-          videoModal.classList.remove('open');
-          videoFrame.pause();
-          videoFrame.currentTime = 0;
-          videoFrame.removeAttribute('src');
-          videoFrame.load();
-        };
+      const heroEl = document.getElementById('hero');
+      const heroVideo = document.getElementById('heroMockupVideo');
+      if (playBtn && heroEl && heroVideo) {
         playBtn.addEventListener('click', function (e) {
           e.preventDefault();
-          const url = playBtn.getAttribute('data-video-url');
-          videoFrame.src = url;
-          videoModal.classList.add('open');
-          videoFrame.play();
-        });
-        videoModal.querySelector('.video-modal-backdrop').addEventListener('click', closeVideoModal);
-        videoModal.querySelector('.video-modal-close').addEventListener('click', closeVideoModal);
-        document.addEventListener('keydown', function (e) {
-          if (e.key === 'Escape') closeVideoModal();
+          const showing = heroEl.classList.toggle('show-mockup');
+          const icon = playBtn.querySelector('i');
+          if (icon) {
+            icon.classList.toggle('bi-play-fill', !showing);
+            icon.classList.toggle('bi-pause-fill', showing);
+          }
+          if (showing) {
+            heroVideo.load();
+            heroVideo.play().catch(function () {});
+          } else {
+            heroVideo.pause();
+            heroVideo.currentTime = 0;
+          }
         });
       }
 
