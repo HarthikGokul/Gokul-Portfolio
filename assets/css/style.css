@@ -182,6 +182,13 @@ body, #header, #footer, section {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.6s ease 0.1s;
+}
+
+#preloader.preloader-hide {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
 }
 
 #preloader:before,
@@ -760,6 +767,26 @@ body, #header, #footer, section {
   flex-wrap: wrap;
 }
 
+/* ---- Scroll-in reveal after preloader ---- */
+body.pre-reveal .hero-text-col,
+body.pre-reveal .hero-mockup-col {
+  opacity: 0;
+  transform: translateY(60px);
+}
+
+body.page-ready .hero-text-col {
+  animation: heroScrollReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+}
+
+body.page-ready .hero-mockup-col {
+  animation: heroScrollReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
+}
+
+@keyframes heroScrollReveal {
+  0%   { opacity: 0; transform: translateY(60px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
 .hero-text-col {
   flex: 1 1 420px;
 }
@@ -767,9 +794,14 @@ body, #header, #footer, section {
 .hero-mockup-col {
   flex: 1 1 380px;
   position: relative;
-  display: flex;
+  display: none;
   justify-content: center;
 }
+
+#hero.show-mockup .hero-mockup-col {
+  display: flex;
+}
+
 
 /* ---- Browser mockup ---- */
 .browser-mockup {
@@ -3264,4 +3296,385 @@ html.dark-theme .carousel-section {
   .mbc-item.mbc-small {
     width: 60px;
   }
+}
+
+/*--------------------------------------------------------------
+# Accessibility: respect reduced-motion preference
+--------------------------------------------------------------*/
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  #cursor-glow, .cursor-sparkle { display: none !important; }
+}
+
+
+/*--------------------------------------------------------------
+# Preloader name animation
+--------------------------------------------------------------*/
+#preloader-name {
+  position: absolute;
+  bottom: calc(50% + 60px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 6px;
+  background: linear-gradient(90deg, #0563bb, #ffc107, #0563bb);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: preloaderNameShine 1.6s linear infinite, preloaderNameIn 0.8s ease-out;
+}
+
+@keyframes preloaderNameShine {
+  to { background-position: 200% center; }
+}
+
+@keyframes preloaderNameIn {
+  from { opacity: 0; letter-spacing: 16px; }
+  to   { opacity: 1; letter-spacing: 6px; }
+}
+
+/*--------------------------------------------------------------
+# WhatsApp floating button
+--------------------------------------------------------------*/
+.whatsapp-float {
+  position: fixed;
+  right: 20px;
+  bottom: 140px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: transform 0.25s ease;
+}
+
+.whatsapp-float:hover {
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.whatsapp-float::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(37, 211, 102, 0.7);
+  animation: playRingPulse 2.2s ease-out infinite;
+}
+
+/*--------------------------------------------------------------
+# Mobile performance: lighter hero effects
+--------------------------------------------------------------*/
+@media (max-width: 768px) {
+  .hero-particles span:nth-child(n+6),
+  .hero-symbols .sym:nth-child(n+6) { display: none; }
+  #hero::after { animation: none; }
+  #preloader-name { font-size: 16px; letter-spacing: 4px; }
+}
+
+
+/*--------------------------------------------------------------
+# Quick contact form
+--------------------------------------------------------------*/
+.quick-contact {
+  max-width: 760px;
+  margin: 60px auto 0;
+  padding: 34px 30px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 15px 40px rgba(5, 99, 187, 0.12);
+  border: 1px solid rgba(5, 99, 187, 0.12);
+  text-align: center;
+}
+
+.quick-contact h3 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #45505b;
+  margin-bottom: 6px;
+}
+
+.quick-contact > p {
+  color: #728394;
+  margin-bottom: 24px;
+}
+
+.qc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  text-align: left;
+}
+
+.qc-full { grid-column: 1 / -1; }
+
+.qc-field { position: relative; }
+
+.qc-field input,
+.qc-field textarea {
+  width: 100%;
+  padding: 16px 14px 8px;
+  border: 1px solid #d5dbe2;
+  border-radius: 10px;
+  background: transparent;
+  font-size: 15px;
+  color: #45505b;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  resize: vertical;
+}
+
+.qc-field label {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  color: #8a97a5;
+  font-size: 15px;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.qc-field input:focus,
+.qc-field textarea:focus {
+  border-color: #0563bb;
+  box-shadow: 0 0 0 4px rgba(5, 99, 187, 0.12);
+}
+
+.qc-field input:focus + label,
+.qc-field input:not(:placeholder-shown) + label,
+.qc-field textarea:focus + label,
+.qc-field textarea:not(:placeholder-shown) + label {
+  top: 4px;
+  font-size: 11px;
+  color: #0563bb;
+}
+
+.qc-actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+
+.qc-btn {
+  border: 0;
+  border-radius: 50px;
+  padding: 12px 28px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.qc-btn:hover { transform: translateY(-3px); }
+.qc-btn-wa   { background: #25d366; }
+.qc-btn-wa:hover   { box-shadow: 0 10px 20px rgba(37, 211, 102, 0.4); }
+.qc-btn-mail { background: #0563bb; }
+.qc-btn-mail:hover { box-shadow: 0 10px 20px rgba(5, 99, 187, 0.4); }
+
+.qc-note { min-height: 22px; margin-top: 14px; font-size: 14px; }
+.qc-note.qc-error { color: #e03b3b; }
+.qc-note.qc-ok    { color: #18a957; }
+
+html.dark-theme .quick-contact {
+  background: #1c1c1c;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+}
+html.dark-theme .quick-contact h3,
+html.dark-theme .qc-field input,
+html.dark-theme .qc-field textarea { color: #e6e6e6; }
+html.dark-theme .qc-field input,
+html.dark-theme .qc-field textarea { border-color: #3a3a3a; }
+
+@media (max-width: 600px) {
+  .qc-grid { grid-template-columns: 1fr; }
+  .quick-contact { padding: 26px 18px; margin-top: 40px; }
+}
+
+
+/*--------------------------------------------------------------
+# Services + Tech marquee
+--------------------------------------------------------------*/
+.services {
+  position: relative;
+  padding-bottom: 40px;
+}
+
+.service-card {
+  position: relative;
+  height: 100%;
+  padding: 34px 24px 28px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid rgba(5, 99, 187, 0.1);
+  box-shadow: 0 10px 30px rgba(69, 80, 91, 0.08);
+  overflow: hidden;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  z-index: 0;
+}
+
+.service-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #0563bb, #ffc107);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+}
+
+.service-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 22px 45px rgba(5, 99, 187, 0.25);
+}
+
+.service-card:hover::before { opacity: 1; }
+
+.service-card h4,
+.service-card p { transition: color 0.4s ease; }
+
+.service-card h4 {
+  font-size: 19px;
+  font-weight: 700;
+  color: #45505b;
+  margin: 18px 0 10px;
+}
+
+.service-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #728394;
+  margin: 0;
+}
+
+.service-card:hover h4,
+.service-card:hover p,
+.service-card:hover .service-num { color: #fff; }
+
+.service-num {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  font-size: 34px;
+  font-weight: 800;
+  color: rgba(5, 99, 187, 0.12);
+  transition: color 0.4s ease;
+}
+
+.service-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  background: #eef7ff;
+  color: #0563bb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.4s ease, color 0.4s ease;
+}
+
+.service-card:hover .service-icon {
+  transform: rotate(-8deg) scale(1.12);
+  background: #fff;
+  color: #0563bb;
+}
+
+/* Tech stack marquee */
+.tech-marquee {
+  margin-top: 50px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.tech-track {
+  display: flex;
+  width: max-content;
+  animation: techScroll 28s linear infinite;
+}
+
+.tech-marquee:hover .tech-track { animation-play-state: paused; }
+
+.tech-set {
+  display: flex;
+  gap: 16px;
+  padding-right: 16px;
+}
+
+.tech-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: 50px;
+  background: #fff;
+  border: 1px solid rgba(5, 99, 187, 0.18);
+  color: #45505b;
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(69, 80, 91, 0.06);
+  transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.tech-chip i { color: #0563bb; font-size: 18px; transition: color 0.3s ease; }
+
+.tech-chip:hover { transform: translateY(-4px); background: #0563bb; color: #fff; }
+.tech-chip:hover i { color: #ffc107; }
+
+@keyframes techScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+html.dark-theme .service-card,
+html.dark-theme .tech-chip {
+  background: #1c1c1c;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+html.dark-theme .service-card h4,
+html.dark-theme .tech-chip { color: #e6e6e6; }
+html.dark-theme .service-icon { background: #262626; }
+
+
+/*--------------------------------------------------------------
+# Performance
+--------------------------------------------------------------*/
+#hero.hero-offscreen *,
+#hero.hero-offscreen::after {
+  animation-play-state: paused !important;
+}
+
+/* Skip rendering of heavy off-screen sections until needed */
+#uiux-showcase,
+#services,
+#contact {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 700px;
+}
+
+/* Promote only the elements that animate constantly */
+.browser-mockup, .laptop-mockup, .phone-mockup, .tv-mockup {
+  will-change: transform;
 }
