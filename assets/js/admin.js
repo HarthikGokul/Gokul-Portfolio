@@ -104,11 +104,11 @@
     try {
       var d = JSON.parse(localStorage.getItem(CFG.lsKey) || 'null');
       if (d && typeof d === 'object') {
-        d.text = d.text || {}; d.images = d.images || {}; d.projects = d.projects || null;
+        d.text = d.text || {}; d.images = d.images || {}; d.projects = d.projects || null; d.resume = d.resume || null; d.cv = d.cv || null;
         return d;
       }
     } catch (e) { /* ignore */ }
-    return { text: {}, images: {}, projects: null };
+    return { text: {}, images: {}, projects: null, resume: null, cv: null };
   }
   function saveData() { localStorage.setItem(CFG.lsKey, JSON.stringify(data)); }
 
@@ -159,7 +159,7 @@
   /* ------------------------------------------------------------------ */
   /* Capture defaults, then apply saved content to the page              */
   /* ------------------------------------------------------------------ */
-  var defaults = { text: {}, images: {}, projects: [] };
+  var defaults = { text: {}, images: {}, projects: [], resume: null, cv: 'assets/img/GOKUL_CV.pdf' };
   var imgCache = {};
 
   function captureDefaults() {
@@ -185,6 +185,7 @@
         imgUrl: img ? img.getAttribute('src') : ''
       });
     });
+    defaults.resume = parseResume();
   }
 
   function applyText() {
@@ -208,6 +209,119 @@
         $$('[data-cms-img="' + key + '"]').forEach(function (n) { n.src = url; });
       }).catch(function () { /* ignore */ });
     });
+  }
+
+
+  /* ------------------------------------------------------------------ */
+  /* Resume (summary, education, experience) + CV file                   */
+  /* ------------------------------------------------------------------ */
+  function clean(t) { return (t || '').replace(/\s+/g, ' ').trim(); }
+  function txt(n) { return n ? clean(n.textContent) : ''; }
+
+  function parseResume() {
+    var root = $('#resume');
+    if (!root) return null;
+    var r = { intro: '', summary: { name: '', text: '', address: '', phone: '', email: '' }, education: [], experience: [] };
+    r.intro = txt($('.section-title p', root));
+    var cols = $$('.row > [class*="col-lg-6"]', root);
+    var left = cols[0], right = cols[1];
+    if (left) {
+      var s0 = $('.resume-item.pb-0', left);
+      if (s0) {
+        var lis = $$('li', s0);
+        r.summary = {
+          name: txt($('h4', s0)),
+          text: txt($('p em', s0)).replace(/\s*\\\s*/g, ' '),
+          address: txt(lis[0]), phone: txt(lis[1]), email: txt(lis[2])
+        };
+      }
+      $$('.resume-item', left).forEach(function (it) {
+        if (it.classList.contains('pb-0')) return;
+        var ps = $$('p', it);
+        r.education.push({ id: uid(), title: txt($('h4', it)), period: txt($('h5', it)), place: txt(ps[0]), note: txt(ps[1]) });
+      });
+    }
+    if (right) {
+      $$('.resume-item', right).forEach(function (it) {
+        r.experience.push({
+          id: uid(), title: txt($('h4', it)), period: txt($('h5', it)), company: txt($('p em', it)),
+          points: $$('li', it).map(txt).filter(Boolean)
+        });
+      });
+    }
+    return r;
+  }
+
+  function renderResume() {
+    var r = data.resume;
+    var root = $('#resume');
+    if (!r || !root) return;
+    var introEl = $('.section-title p', root);
+    if (introEl) introEl.textContent = r.intro || '';
+    var row = $('.row', root);
+    if (!row) return;
+
+    var s0 = r.summary || {};
+    var sumList = el('ul', {}, []);
+    if (s0.address) sumList.appendChild(el('li', { class: 'text-white', text: s0.address }));
+    if (s0.phone) sumList.appendChild(el('li', { class: 'text-white', text: s0.phone }));
+    if (s0.email) sumList.appendChild(el('li', { class: 'text-primary' }, [el('a', { href: 'mailto:' + s0.email, text: s0.email })]));
+    var left = el('div', { class: 'col-lg-6' }, [
+      el('h3', { class: 'resume-title text-warning', text: 'Summary' }),
+      el('div', { class: 'resume-item pb-0' }, [
+        el('h4', { class: 'text-info', text: s0.name || '' }),
+        el('p', { class: 'text-white' }, [el('em', { text: s0.text || '' })]),
+        sumList
+      ]),
+      el('h3', { class: 'resume-title text-warning mt-5', text: 'Education' })
+    ]);
+    (r.education || []).forEach(function (e) {
+      var item = el('div', { class: 'resume-item' }, [
+        el('h4', { class: 'text-info', text: e.title }),
+        e.period ? el('h5', { class: 'text-white', text: e.period }) : null,
+        e.place ? el('p', { class: 'text-white' }, [el('em', { text: e.place })]) : null,
+        e.note ? el('p', { class: 'text-white', text: e.note }) : null
+      ]);
+      left.appendChild(item);
+    });
+
+    var right = el('div', { class: 'col-lg-6' }, [
+      el('h3', { class: 'resume-title text-warning', text: 'Professional Experience' })
+    ]);
+    (r.experience || []).forEach(function (x) {
+      var ul = el('ul', {}, (x.points || []).map(function (t) { return el('li', { class: 'text-white', text: t }); }));
+      right.appendChild(el('div', { class: 'resume-item' }, [
+        el('h4', { class: 'text-info', text: x.title }),
+        x.period ? el('h5', { class: 'text-white', text: x.period }) : null,
+        x.company ? el('p', { class: 'text-primary' }, [el('em', { text: x.company })]) : null,
+        (x.points && x.points.length) ? ul : null
+      ]));
+    });
+
+    row.innerHTML = '';
+    row.appendChild(left);
+    row.appendChild(right);
+  }
+
+  function dataUrlToBlob(u) {
+    var parts = u.split(',');
+    var mime = (parts[0].match(/:(.*?);/) || [])[1] || 'application/pdf';
+    var bin = atob(parts[1]);
+    var arr = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+    return new Blob([arr], { type: mime });
+  }
+
+  function applyCv() {
+    if (!data.cv) return;
+    idbGet('cv:file').then(function (u) {
+      if (!u) return;
+      var url = URL.createObjectURL(dataUrlToBlob(u));
+      $$('[data-cms-cv]').forEach(function (a) {
+        a.setAttribute('href', url);
+        a.setAttribute('download', data.cv.name || 'CV.pdf');
+      });
+    }).catch(function () { /* ignore */ });
   }
 
   var lightbox = null;
@@ -414,6 +528,10 @@
   var draft = null;          // { text:{}, images:{key:dataURL|'__reset__'} }
   var pDraft = null;         // working copy of projects
   var pDirty = false;
+  var rDraft = null;         // working copy of resume
+  var rDirty = false;
+  var rReset = false;
+  var cDraft = null;         // null | {dataUrl,name} | '__reset__'
   var activeTab = 'hero';
 
   var TABS = [
@@ -421,6 +539,7 @@
     { id: 'about', label: 'About', icon: 'bx-user' },
     { id: 'stats', label: 'Stats', icon: 'bx-bar-chart-alt-2' },
     { id: 'services', label: 'Services', icon: 'bx-briefcase-alt-2' },
+    { id: 'resume', label: 'Resume', icon: 'bx-file-blank' },
     { id: 'projects', label: 'Projects', icon: 'bx-book-content' },
     { id: 'showcase', label: 'Showcase', icon: 'bx-devices' },
     { id: 'contact', label: 'Contact', icon: 'bx-envelope' },
@@ -532,6 +651,8 @@
           fText('Description', 'services.' + i + '.text', { multiline: true, rows: 3 })
         ]));
       });
+    } else if (activeTab === 'resume') {
+      renderResumeTab(body);
     } else if (activeTab === 'projects') {
       renderProjectsTab(body);
     } else if (activeTab === 'showcase') {
@@ -550,6 +671,136 @@
     } else if (activeTab === 'backup') {
       renderBackupTab(body);
     }
+  }
+
+
+  /* ---- Resume tab ---- */
+  function touchR() { rDirty = true; rReset = false; }
+
+  function rField(label, obj, key, opts) {
+    opts = opts || {};
+    var id = 'r_' + Math.random().toString(36).slice(2, 8);
+    var input = opts.multiline
+      ? el('textarea', { id: id, rows: opts.rows || 3, placeholder: ' ' })
+      : el('input', { id: id, type: opts.type || 'text', placeholder: ' ' });
+    input.value = obj[key] || '';
+    input.addEventListener('input', function () { obj[key] = input.value; touchR(); });
+    var wrap = el('div', { class: 'adm-field' + (opts.multiline ? ' adm-field-area' : '') }, [input, el('label', { for: id, text: label })]);
+    if (opts.hint) wrap.appendChild(el('small', { class: 'adm-hint', text: opts.hint }));
+    return wrap;
+  }
+
+  function rPoints(label, obj) {
+    var id = 'r_' + Math.random().toString(36).slice(2, 8);
+    var ta = el('textarea', { id: id, rows: 6, placeholder: ' ' });
+    ta.value = (obj.points || []).join('\n');
+    ta.addEventListener('input', function () {
+      obj.points = ta.value.split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
+      touchR();
+    });
+    return el('div', { class: 'adm-field adm-field-area' }, [
+      ta, el('label', { for: id, text: label }),
+      el('small', { class: 'adm-hint', text: 'One point per line.' })
+    ]);
+  }
+
+  function rCard(list, idx, label, fields, body) {
+    var up = el('button', { type: 'button', class: 'adm-icon-btn', title: 'Move up', html: '<i class="bx bx-chevron-up"></i>' });
+    var down = el('button', { type: 'button', class: 'adm-icon-btn', title: 'Move down', html: '<i class="bx bx-chevron-down"></i>' });
+    var del = el('button', { type: 'button', class: 'adm-icon-btn adm-danger', title: 'Delete', html: '<i class="bx bx-trash"></i>' });
+    up.addEventListener('click', function () { if (idx > 0) { list.splice(idx - 1, 0, list.splice(idx, 1)[0]); touchR(); renderTab(body); } });
+    down.addEventListener('click', function () { if (idx < list.length - 1) { list.splice(idx + 1, 0, list.splice(idx, 1)[0]); touchR(); renderTab(body); } });
+    del.addEventListener('click', function () {
+      if (confirm('Delete this entry?')) { list.splice(idx, 1); touchR(); renderTab(body); }
+    });
+    return el('div', { class: 'adm-project' }, [
+      el('div', { class: 'adm-project-head' }, [
+        el('strong', { text: label + ' #' + (idx + 1) }),
+        el('div', { class: 'adm-project-tools' }, [up, down, del])
+      ])
+    ].concat(fields));
+  }
+
+  function renderResumeTab(body) {
+    if (!rDraft) rDraft = clone(data.resume || defaults.resume || { intro: '', summary: {}, education: [], experience: [] });
+    var r = rDraft;
+    r.summary = r.summary || {}; r.education = r.education || []; r.experience = r.experience || [];
+
+    body.appendChild(el('p', { class: 'adm-note', text: 'Edit everything shown in the Resume section. Press "Save changes" when you are done.' }));
+
+    // CV file
+    var cvInfo = el('small', { class: 'adm-hint', text: cvStatus() });
+    var cvFile = el('input', { type: 'file', accept: 'application/pdf,.pdf', class: 'adm-file' });
+    var cvPick = el('button', { type: 'button', class: 'adm-btn adm-btn-light', html: '<i class="bx bx-upload"></i> Upload CV (PDF)' });
+    cvPick.addEventListener('click', function () { cvFile.click(); });
+    cvFile.addEventListener('change', function () {
+      var f = cvFile.files[0]; if (!f) return;
+      if (f.type !== 'application/pdf' && !/\.pdf$/i.test(f.name)) { toast('Please choose a PDF file.', 'err'); cvFile.value = ''; return; }
+      if (f.size > 8 * 1024 * 1024) { toast('PDF is too large (max 8 MB).', 'err'); cvFile.value = ''; return; }
+      var fr = new FileReader();
+      fr.onload = function () { cDraft = { dataUrl: fr.result, name: f.name }; cvInfo.textContent = f.name + ' (' + Math.round(f.size / 1024) + ' KB) - save to apply'; };
+      fr.onerror = function () { toast('Could not read the file.', 'err'); };
+      fr.readAsDataURL(f); cvFile.value = '';
+    });
+    var cvReset = el('button', { type: 'button', class: 'adm-btn adm-btn-ghost', text: 'Use original CV' });
+    cvReset.addEventListener('click', function () { cDraft = '__reset__'; cvInfo.textContent = 'Original CV will be used - save to apply'; });
+    body.appendChild(section('Download CV button', [
+      el('div', { class: 'adm-image-actions' }, [cvPick, cvReset, cvInfo, cvFile])
+    ]));
+
+    body.appendChild(section('Intro paragraph', [rField('Resume intro', r, 'intro', { multiline: true, rows: 5 })]));
+
+    body.appendChild(section('Summary', [
+      rField('Name', r.summary, 'name'),
+      rField('Summary text', r.summary, 'text', { multiline: true, rows: 6 }),
+      rField('Address', r.summary, 'address'),
+      rField('Phone', r.summary, 'phone'),
+      rField('Email', r.summary, 'email', { type: 'email' })
+    ]));
+
+    // Education
+    var addEdu = el('button', { type: 'button', class: 'adm-btn adm-btn-primary', html: '<i class="bx bx-plus"></i> Add education' });
+    addEdu.addEventListener('click', function () { r.education.push({ id: uid(), title: '', period: '', place: '', note: '' }); touchR(); renderTab(body); });
+    var eduWrap = el('div', { class: 'adm-group' }, [el('h4', { text: 'Education' }), addEdu]);
+    r.education.forEach(function (e, i) {
+      eduWrap.appendChild(rCard(r.education, i, 'Education', [
+        rField('Degree / course', e, 'title'),
+        rField('Years (e.g. 2016 - 2019)', e, 'period'),
+        rField('College / school', e, 'place'),
+        rField('Result / note', e, 'note')
+      ], body));
+    });
+    if (!r.education.length) eduWrap.appendChild(el('p', { class: 'adm-note', text: 'No education added yet.' }));
+    body.appendChild(eduWrap);
+
+    // Experience
+    var addExp = el('button', { type: 'button', class: 'adm-btn adm-btn-primary', html: '<i class="bx bx-plus"></i> Add experience' });
+    addExp.addEventListener('click', function () { r.experience.unshift({ id: uid(), title: '', period: '', company: '', points: [] }); touchR(); renderTab(body); });
+    var expWrap = el('div', { class: 'adm-group' }, [el('h4', { text: 'Professional experience' }), addExp]);
+    r.experience.forEach(function (x, i) {
+      expWrap.appendChild(rCard(r.experience, i, 'Job', [
+        rField('Job title', x, 'title'),
+        rField('Period (e.g. Jan 2023 - Present)', x, 'period'),
+        rField('Company', x, 'company'),
+        rPoints('Responsibilities / achievements', x)
+      ], body));
+    });
+    if (!r.experience.length) expWrap.appendChild(el('p', { class: 'adm-note', text: 'No experience added yet.' }));
+    body.appendChild(expWrap);
+
+    var resetR = el('button', { type: 'button', class: 'adm-btn adm-btn-danger', html: '<i class="bx bx-reset"></i> Reset resume to original' });
+    resetR.addEventListener('click', function () {
+      if (!confirm('Discard your resume edits and go back to the original resume?')) return;
+      rDraft = clone(defaults.resume); rDirty = true; rReset = true; renderTab(body);
+      toast('Original resume restored - save to apply', 'info');
+    });
+    body.appendChild(section('Reset', [resetR]));
+  }
+
+  function cvStatus() {
+    if (cDraft === '__reset__') return 'Original CV will be used - save to apply';
+    if (cDraft) return cDraft.name + ' - save to apply';
+    return data.cv ? 'Current file: ' + (data.cv.name || 'uploaded CV') : 'Current file: original (GOKUL_CV.pdf)';
   }
 
   function initProjectsDraft() {
@@ -639,7 +890,7 @@
             var keys = Object.keys(obj.images || {});
             return Promise.all(keys.map(function (k) { return idbSet(k, obj.images[k]); }));
           }).then(function () {
-            data = obj.data; data.text = data.text || {}; data.images = data.images || {};
+            data = obj.data; data.text = data.text || {}; data.images = data.images || {}; data.resume = data.resume || null; data.cv = data.cv || null;
             saveData(); toast('Backup imported. Reloading...', 'ok');
             setTimeout(function () { location.reload(); }, 700);
           }).catch(function (e) { toast('Import failed: ' + e.message, 'err'); });
@@ -666,6 +917,7 @@
     if (panel) return;
     draft = { text: {}, images: {} };
     pDraft = null; pDirty = false;
+    rDraft = null; rDirty = false; rReset = false; cDraft = null;
 
     var body = el('div', { class: 'adm-body' });
     var tabsEl = el('div', { class: 'adm-tabs', role: 'tablist' });
@@ -706,7 +958,7 @@
   function panelKey(e) { if (e.key === 'Escape') closePanel(); }
 
   function hasUnsaved() {
-    return Object.keys(draft.text).length > 0 || Object.keys(draft.images).length > 0 || pDirty;
+    return Object.keys(draft.text).length > 0 || Object.keys(draft.images).length > 0 || pDirty || rDirty || !!cDraft;
   }
 
   function closePanel() {
@@ -727,6 +979,11 @@
         if (!p.title.trim()) { toast('Project #' + (i + 1) + ' needs a title.', 'err'); return; }
         if (!(p.newImg || p.preview || p.imgUrl)) { toast('Project "' + p.title + '" needs an image.', 'err'); return; }
       }
+    }
+    if (rDirty && rDraft && !rReset) {
+      var re = rDraft.education || [], rx = rDraft.experience || [], k;
+      for (k = 0; k < re.length; k++) { if (!clean(re[k].title)) { toast('Education #' + (k + 1) + ' needs a degree / course name.', 'err'); return; } }
+      for (k = 0; k < rx.length; k++) { if (!clean(rx[k].title)) { toast('Job #' + (k + 1) + ' needs a job title.', 'err'); return; } }
     }
     btn.disabled = true;
     var jobs = [];
@@ -765,9 +1022,26 @@
       data.projects = out;
     }
 
+    // resume
+    if (rDirty) {
+      if (rReset || !rDraft) { data.resume = null; }
+      else {
+        var rr = clone(rDraft);
+        rr.intro = (rr.intro || '').trim();
+        Object.keys(rr.summary || {}).forEach(function (k2) { rr.summary[k2] = (rr.summary[k2] || '').trim(); });
+        rr.education = (rr.education || []).map(function (e) { return { id: e.id, title: clean(e.title), period: clean(e.period), place: clean(e.place), note: clean(e.note) }; });
+        rr.experience = (rr.experience || []).map(function (x) { return { id: x.id, title: clean(x.title), period: clean(x.period), company: clean(x.company), points: (x.points || []).map(clean).filter(Boolean) }; });
+        data.resume = rr;
+      }
+    }
+
+    // CV file
+    if (cDraft === '__reset__') { data.cv = null; jobs.push(idbDel('cv:file')); }
+    else if (cDraft) { data.cv = { name: cDraft.name }; jobs.push(idbSet('cv:file', cDraft.dataUrl)); }
+
     Promise.all(jobs).then(function () {
       saveData();
-      draft = { text: {}, images: {} }; pDirty = false;
+      draft = { text: {}, images: {} }; pDirty = false; rDirty = false; rReset = false; cDraft = null;
       toast('Saved! Reloading to apply...', 'ok');
       setTimeout(function () { location.reload(); }, 800);
     }).catch(function (e) {
@@ -784,6 +1058,8 @@
     applyText();
     applyImages();
     renderProjects();
+    renderResume();
+    applyCv();
 
     var link = $('#adminSignInLink');
     if (link) {
