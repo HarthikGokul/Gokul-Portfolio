@@ -2,11 +2,12 @@
  * Portfolio Admin Panel (front-end only)
  * - Sign in with email + password (password is stored only as a SHA-256 hash)
  * - Edit text, upload images, manage projects
- * - Data is saved in THIS browser (localStorage + IndexedDB)
+ * - Edits are saved in THIS browser (localStorage + IndexedDB)
+ * - "Publish" tab commits the content + images to your GitHub repo
+ *   (content/site.json) so every visitor sees them.
  *
- * IMPORTANT: this is a client-side panel. It is NOT real security and the
- * changes are not visible to other visitors. For a public, secure admin you
- * need a backend (e.g. Firebase / Supabase).
+ * NOTE: the sign-in is client-side only. Publishing needs a GitHub token that
+ * you paste in the Publish tab, so nobody can publish without it.
  */
 (function () {
   'use strict';
@@ -110,7 +111,23 @@
     } catch (e) { /* ignore */ }
     return { text: {}, images: {}, projects: null, resume: null, cv: null };
   }
-  function saveData() { localStorage.setItem(CFG.lsKey, JSON.stringify(data)); }
+  function saveData() {
+    if (data.projects) data.projects.forEach(function (p) { delete p._src; delete p.preview; delete p.newImg; });
+    localStorage.setItem(CFG.lsKey, JSON.stringify(data));
+  }
+
+  /* Published content (content/site.json from the live site, cached) */
+  var PUB_CACHE = 'gk_pub_cache';
+  function has(o, k) { return Object.prototype.hasOwnProperty.call(o, k); }
+  function normPub(d) {
+    d = (d && typeof d === 'object') ? d : {};
+    d.text = d.text || {}; d.images = d.images || {};
+    d.projects = d.projects || null; d.resume = d.resume || null; d.cv = d.cv || null;
+    return d;
+  }
+  var pub = (function () {
+    try { return normPub(JSON.parse(localStorage.getItem(PUB_CACHE) || 'null')); } catch (e) { return normPub(null); }
+  })();
 
   var dbPromise = null;
   function db() {
@@ -191,8 +208,10 @@
   function applyText() {
     $$('[data-cms]').forEach(function (n) {
       var key = n.getAttribute('data-cms');
-      if (!Object.prototype.hasOwnProperty.call(data.text, key)) return;
-      var v = data.text[key];
+      var v;
+      if (has(data.text, key)) v = data.text[key];
+      else if (has(pub.text, key)) v = pub.text[key];
+      else return;
       var attr = n.getAttribute('data-cms-attr');
       var pre = n.getAttribute('data-cms-href-prefix');
       if (attr) n.setAttribute(attr, v);
@@ -202,14 +221,22 @@
   }
 
   function applyImages() {
-    Object.keys(data.images).forEach(function (key) {
-      idbGet(key).then(function (url) {
-        if (!url) return;
-        imgCache[key] = url;
-        $$('[data-cms-img="' + key + '"]').forEach(function (n) { n.src = url; });
-      }).catch(function () { /* ignore */ });
+    $$('[data-cms-img]').forEach(function (n) {
+      var key = n.getAttribute('data-cms-img');
+      var loc = data.images[key];
+      if (loc === 1) {
+        idbGet(key).then(function (url) {
+          if (!url) { if (pub.images[key]) n.src = pub.images[key]; return; }
+          imgCache[key] = url; n.src = url;
+        }).catch(function () { /* ignore */ });
+      } else if (loc === 'orig') {
+        n.src = defaults.images[key];
+      } else if (pub.images[key]) {
+        n.src = pub.images[key];
+      }
     });
   }
+
 
 
   /* ------------------------------------------------------------------ */
@@ -253,7 +280,7 @@
   }
 
   function renderResume() {
-    var r = data.resume;
+    var r = data.resume || pub.resume;
     var root = $('#resume');
     if (!r || !root) return;
     var introEl = $('.section-title p', root);
@@ -313,16 +340,25 @@
   }
 
   function applyCv() {
-    if (!data.cv) return;
+    var c = data.cv || pub.cv;
+    if (!c) return;
+    if (c.url) {
+      $$('[data-cms-cv]').forEach(function (a) {
+        a.setAttribute('href', c.url);
+        a.setAttribute('download', c.name || 'CV.pdf');
+      });
+      return;
+    }
     idbGet('cv:file').then(function (u) {
       if (!u) return;
       var url = URL.createObjectURL(dataUrlToBlob(u));
       $$('[data-cms-cv]').forEach(function (a) {
         a.setAttribute('href', url);
-        a.setAttribute('download', data.cv.name || 'CV.pdf');
+        a.setAttribute('download', c.name || 'CV.pdf');
       });
     }).catch(function () { /* ignore */ });
   }
+
 
   var lightbox = null;
   function relayoutIsotope() {
@@ -339,9 +375,15 @@
 
   function renderProjects() {
     var c = $('.portfolio-container');
-    if (!c || !data.projects) return;
-    Promise.all(data.projects.map(function (p) {
-      return projectImageSrc(p).then(function (src) { p._src = src; return p; });
+    var plist = data.projects || pub.projects;
+    if (!c || !plist) return;
+    Promise.all(plist.map(function (p) {
+      return projectImageSrc(p).then(function (src) {
+        var q = {};
+        Object.keys(p).forEach(function (k) { q[k] = p[k]; });
+        q._src = src;
+        return q;
+      });
     })).then(function (list) {
       c.innerHTML = '';
       var timer = null;
@@ -369,7 +411,10 @@
       });
       relayoutIsotope();
       if (typeof GLightbox === 'function') {
-        try { lightbox = GLightbox({ selector: '.portfolio-lightbox-cms' }); } catch (e) { /* ignore */ }
+        try {
+          if (lightbox && lightbox.destroy) lightbox.destroy();
+          lightbox = GLightbox({ selector: '.portfolio-lightbox-cms' });
+        } catch (e) { /* ignore */ }
       }
     });
   }
@@ -543,19 +588,22 @@
     { id: 'projects', label: 'Projects', icon: 'bx-book-content' },
     { id: 'showcase', label: 'Showcase', icon: 'bx-devices' },
     { id: 'contact', label: 'Contact', icon: 'bx-envelope' },
+    { id: 'publish', label: 'Publish', icon: 'bx-cloud-upload' },
     { id: 'backup', label: 'Backup', icon: 'bx-save' }
   ];
 
   function curText(key) {
     if (draft.text.hasOwnProperty(key)) return draft.text[key];
     if (data.text.hasOwnProperty(key)) return data.text[key];
+    if (has(pub.text, key)) return pub.text[key];
     return defaults.text[key] || '';
   }
   function curImage(path) {
     var d = draft.images[path];
     if (d === '__reset__') return defaults.images[path];
     if (d) return d;
-    return imgCache[path] || defaults.images[path];
+    if (data.images[path] === 'orig') return defaults.images[path];
+    return imgCache[path] || pub.images[path] || defaults.images[path];
   }
 
   function fText(label, key, opts) {
@@ -668,6 +716,8 @@
         fText('Email', 'contact.email', { type: 'email' }),
         fText('Phone', 'contact.phone')
       ]));
+    } else if (activeTab === 'publish') {
+      renderPublishTab(body);
     } else if (activeTab === 'backup') {
       renderBackupTab(body);
     }
@@ -722,7 +772,7 @@
   }
 
   function renderResumeTab(body) {
-    if (!rDraft) rDraft = clone(data.resume || defaults.resume || { intro: '', summary: {}, education: [], experience: [] });
+    if (!rDraft) rDraft = clone(data.resume || pub.resume || defaults.resume || { intro: '', summary: {}, education: [], experience: [] });
     var r = rDraft;
     r.summary = r.summary || {}; r.education = r.education || []; r.experience = r.experience || [];
 
@@ -800,12 +850,13 @@
   function cvStatus() {
     if (cDraft === '__reset__') return 'Original CV will be used - save to apply';
     if (cDraft) return cDraft.name + ' - save to apply';
-    return data.cv ? 'Current file: ' + (data.cv.name || 'uploaded CV') : 'Current file: original (GOKUL_CV.pdf)';
+    var c = data.cv || pub.cv;
+    return c ? 'Current file: ' + (c.name || 'uploaded CV') : 'Current file: original (GOKUL_CV.pdf)';
   }
 
   function initProjectsDraft() {
     if (pDraft) return Promise.resolve();
-    var list = data.projects ? clone(data.projects) : clone(defaults.projects);
+    var list = data.projects ? clone(data.projects) : (pub.projects ? clone(pub.projects) : clone(defaults.projects));
     return Promise.all(list.map(function (p) {
       return projectImageSrc(p).then(function (src) { p.preview = src; p.newImg = null; return p; });
     })).then(function (l) { pDraft = l; });
@@ -860,6 +911,224 @@
     });
   }
 
+
+  /* ------------------------------------------------------------------ */
+  /* Publish to GitHub                                                   */
+  /* ------------------------------------------------------------------ */
+  var PUB_CFG = 'gk_pub_cfg', PUB_TOKEN = 'gk_pub_token';
+
+  function guessRepo() {
+    var h = location.hostname;
+    if (/\.github\.io$/i.test(h)) {
+      var owner = h.replace(/\.github\.io$/i, '');
+      var seg = location.pathname.split('/').filter(Boolean)[0];
+      var repo = (seg && seg.indexOf('.') === -1) ? seg : (owner + '.github.io');
+      return { owner: owner, repo: repo };
+    }
+    return { owner: '', repo: '' };
+  }
+
+  function loadPubCfg() {
+    var c = {};
+    try { c = JSON.parse(localStorage.getItem(PUB_CFG) || '{}') || {}; } catch (e) { c = {}; }
+    var g = guessRepo();
+    return {
+      owner: c.owner || g.owner, repo: c.repo || g.repo, branch: c.branch || 'main',
+      remember: !!c.remember,
+      token: c.remember ? (c.token || '') : (sessionStorage.getItem(PUB_TOKEN) || '')
+    };
+  }
+  function savePubCfg(c) {
+    var o = { owner: c.owner, repo: c.repo, branch: c.branch, remember: !!c.remember };
+    if (c.remember) { o.token = c.token; sessionStorage.removeItem(PUB_TOKEN); }
+    else { sessionStorage.setItem(PUB_TOKEN, c.token); }
+    localStorage.setItem(PUB_CFG, JSON.stringify(o));
+  }
+
+  function b64FromDataUrl(u) { return u.split(',')[1] || ''; }
+  function b64FromText(t) { return btoa(unescape(encodeURIComponent(t))); }
+  function extFromDataUrl(u) {
+    var m = (u.match(/^data:([^;,]+)/) || [])[1] || '';
+    return ({ 'image/webp': 'webp', 'image/png': 'png', 'image/jpeg': 'jpg', 'image/gif': 'gif', 'image/svg+xml': 'svg', 'application/pdf': 'pdf' })[m] || 'bin';
+  }
+  function safeName(t) { return String(t).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'file'; }
+
+  function gh(cfg, path, method, body, query) {
+    var url = 'https://api.github.com/repos/' + encodeURIComponent(cfg.owner) + '/' + encodeURIComponent(cfg.repo) +
+      '/contents/' + path.split('/').map(encodeURIComponent).join('/') + (query || '');
+    return fetch(url, {
+      method: method,
+      headers: {
+        'Accept': 'application/vnd.github+json',
+        'Authorization': 'Bearer ' + cfg.token,
+        'X-GitHub-Api-Version': '2022-11-28',
+        'Content-Type': 'application/json'
+      },
+      body: body ? JSON.stringify(body) : undefined
+    }).then(function (r) {
+      if (r.ok) return r.json();
+      if (r.status === 404 && method === 'GET') return null;
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        var msg = j && j.message ? j.message : ('HTTP ' + r.status);
+        if (r.status === 401) msg = 'Token is invalid or expired.';
+        else if (r.status === 403) msg = 'Token has no permission (needs Contents: Read and write) or rate limit hit.';
+        else if (r.status === 404) msg = 'Repository not found. Check owner / repo name and token access.';
+        var e = new Error(msg); e.status = r.status; throw e;
+      });
+    });
+  }
+
+  function ghPut(cfg, path, base64, message) {
+    function attempt(retry) {
+      return gh(cfg, path, 'GET', null, '?ref=' + encodeURIComponent(cfg.branch)).then(function (cur) {
+        var body = { message: message, content: base64, branch: cfg.branch };
+        if (cur && cur.sha) body.sha = cur.sha;
+        return gh(cfg, path, 'PUT', body);
+      }).catch(function (e) {
+        if (!retry && (e.status === 409 || e.status === 422)) return attempt(true);
+        throw e;
+      });
+    }
+    return attempt(false);
+  }
+
+  function publishAll(cfg, log) {
+    var payload = {
+      version: 2, updated: new Date().toISOString(),
+      text: Object.assign({}, pub.text, data.text),
+      images: Object.assign({}, pub.images),
+      projects: null, resume: data.resume || pub.resume || null, cv: pub.cv || null
+    };
+    var stamp = Date.now().toString(36);
+    var chain = Promise.resolve();
+    function step(fn) { chain = chain.then(fn); }
+
+    // changed images
+    Object.keys(data.images).forEach(function (key) {
+      var v = data.images[key];
+      if (v === 'orig') { step(function () { payload.images[key] = defaults.images[key]; }); return; }
+      step(function () {
+        return idbGet(key).then(function (u) {
+          if (!u) return;
+          var path = 'content/img/' + safeName(key) + '-' + stamp + '.' + extFromDataUrl(u);
+          log('Uploading image: ' + key);
+          return ghPut(cfg, path, b64FromDataUrl(u), 'Admin: update image ' + key).then(function () { payload.images[key] = path; });
+        });
+      });
+    });
+
+    // projects
+    var plist = data.projects || pub.projects;
+    if (plist) {
+      payload.projects = clone(plist);
+      payload.projects.forEach(function (p) {
+        delete p._src; delete p.preview; delete p.newImg;
+        if (!p.imgKey) return;
+        step(function () {
+          return idbGet(p.imgKey).then(function (u) {
+            if (!u) return;
+            var path = 'content/img/project-' + safeName(p.id) + '-' + stamp + '.' + extFromDataUrl(u);
+            log('Uploading project image: ' + (p.title || p.id));
+            return ghPut(cfg, path, b64FromDataUrl(u), 'Admin: project image ' + (p.title || p.id)).then(function () {
+              p.imgUrl = path; delete p.imgKey;
+            });
+          });
+        });
+      });
+    }
+
+    // CV
+    if (data.cv && !data.cv.url) {
+      step(function () {
+        return idbGet('cv:file').then(function (u) {
+          if (!u) return;
+          var name = safeName((data.cv.name || 'cv').replace(/\.pdf$/i, '')) + '-' + stamp + '.pdf';
+          var path = 'content/cv/' + name;
+          log('Uploading CV: ' + data.cv.name);
+          return ghPut(cfg, path, b64FromDataUrl(u), 'Admin: update CV').then(function () {
+            payload.cv = { name: data.cv.name, url: path };
+          });
+        });
+      });
+    } else if (data.cv && data.cv.url) {
+      step(function () { payload.cv = { name: data.cv.name, url: data.cv.url }; });
+    }
+
+    // content file last
+    step(function () {
+      log('Saving content/site.json');
+      return ghPut(cfg, 'content/site.json', b64FromText(JSON.stringify(payload, null, 1)), 'Admin: update portfolio content');
+    });
+    return chain.then(function () { return payload; });
+  }
+
+  function renderPublishTab(body) {
+    var cfg = loadPubCfg();
+    body.appendChild(el('p', { class: 'adm-note', html: 'Click <strong>Publish</strong> to send your saved changes (text, images, projects, resume, CV) to your GitHub repository. GitHub Pages then shows them to every visitor, usually within 1-2 minutes. <strong>Save changes</strong> first.' }));
+
+    function field(label, id, value, type) {
+      var inp = el('input', { type: type || 'text', id: id, placeholder: ' ', autocomplete: 'off' });
+      inp.value = value || '';
+      return { wrap: el('div', { class: 'adm-field' }, [inp, el('label', { for: id, text: label })]), inp: inp };
+    }
+    var fo = field('GitHub username (owner)', 'pub_owner', cfg.owner);
+    var fr = field('Repository name', 'pub_repo', cfg.repo);
+    var fb = field('Branch', 'pub_branch', cfg.branch);
+    var ft = field('GitHub token', 'pub_token', cfg.token, 'password');
+    var rem = el('input', { type: 'checkbox', id: 'pub_remember' }); rem.checked = cfg.remember;
+    var remLabel = el('label', { class: 'adm-check', for: 'pub_remember' }, [rem, el('span', { text: ' Remember token on this device' })]);
+
+    body.appendChild(section('GitHub connection', [fo.wrap, fr.wrap, fb.wrap, ft.wrap, remLabel,
+      el('small', { class: 'adm-hint', text: 'Untick "Remember" to keep the token only until you close this tab (safer).' })]));
+
+    body.appendChild(el('div', { class: 'adm-note', html:
+      '<strong>How to get a token (one time):</strong><br>' +
+      '1. GitHub &rarr; Settings &rarr; Developer settings &rarr; Personal access tokens &rarr; <em>Fine-grained tokens</em> &rarr; Generate new token.<br>' +
+      '2. Repository access: <em>Only select repositories</em> &rarr; choose your portfolio repo.<br>' +
+      '3. Permissions &rarr; Repository &rarr; <em>Contents: Read and write</em>.<br>' +
+      '4. Generate, copy the token and paste it above. Never share it with anyone.' }));
+
+    var logBox = el('div', { class: 'adm-log', role: 'status' });
+    var pubBtn = el('button', { type: 'button', class: 'adm-btn adm-btn-primary adm-btn-block', html: '<i class="bx bx-cloud-upload"></i> Publish to GitHub' });
+    function log(m) { logBox.textContent += m + '\n'; logBox.scrollTop = logBox.scrollHeight; }
+    function readCfg() {
+      return { owner: fo.inp.value.trim(), repo: fr.inp.value.trim(), branch: fb.inp.value.trim() || 'main', token: ft.inp.value.trim(), remember: rem.checked };
+    }
+
+    pubBtn.addEventListener('click', function () {
+      if (hasUnsaved()) { toast('Click "Save changes" first, then publish.', 'err'); return; }
+      var c = readCfg();
+      if (!c.owner || !c.repo || !c.token) { toast('Enter username, repository and token.', 'err'); return; }
+      savePubCfg(c);
+      pubBtn.disabled = true; logBox.textContent = '';
+      log('Connecting to ' + c.owner + '/' + c.repo + ' (' + c.branch + ')...');
+      publishAll(c, log).then(function (payload) {
+        pub = normPub(payload);
+        try { localStorage.setItem(PUB_CACHE, JSON.stringify(pub)); } catch (e) { /* ignore */ }
+        log('Done! Published successfully.');
+        log('GitHub Pages will update in about 1-2 minutes.');
+        toast('Published to GitHub', 'ok');
+      }).catch(function (e) {
+        log('FAILED: ' + (e && e.message ? e.message : e));
+        toast('Publish failed: ' + (e && e.message ? e.message : e), 'err');
+      }).then(function () { pubBtn.disabled = false; });
+    });
+
+    var sync = el('button', { type: 'button', class: 'adm-btn adm-btn-light', html: '<i class="bx bx-refresh"></i> Discard local edits &amp; load published' });
+    sync.addEventListener('click', function () {
+      if (!confirm('Remove local edits in this browser and show the last published content?')) return;
+      idbClear().catch(function () { }).then(function () {
+        localStorage.removeItem(CFG.lsKey);
+        toast('Loading published content...', 'ok');
+        setTimeout(function () { location.reload(); }, 600);
+      });
+    });
+
+    body.appendChild(section('Publish', [pubBtn, logBox]));
+    body.appendChild(section('Sync', [sync,
+      el('small', { class: 'adm-hint', text: 'Use this on another device to start from what is already published.' })]));
+  }
+
   function download(name, text) {
     var blob = new Blob([text], { type: 'application/json' });
     var a = el('a', { href: URL.createObjectURL(blob), download: name });
@@ -868,7 +1137,7 @@
   }
 
   function renderBackupTab(body) {
-    body.appendChild(el('p', { class: 'adm-note', text: 'Your edits live in this browser only. Export a backup so you never lose them, or move them to another browser/device.' }));
+    body.appendChild(el('p', { class: 'adm-note', text: 'Your unpublished edits live in this browser. Export a backup so you never lose them, or move them to another browser/device. Use the Publish tab to put them on your live site.' }));
     var exp = el('button', { type: 'button', class: 'adm-btn adm-btn-primary', html: '<i class="bx bx-download"></i> Export backup (.json)' });
     exp.addEventListener('click', function () {
       idbAll().then(function (imgs) {
@@ -898,18 +1167,19 @@
       };
       fr.readAsText(f); imp.value = '';
     });
-    var reset = el('button', { type: 'button', class: 'adm-btn adm-btn-danger', html: '<i class="bx bx-reset"></i> Reset everything to original' });
+    var reset = el('button', { type: 'button', class: 'adm-btn adm-btn-danger', html: '<i class="bx bx-reset"></i> Reset local edits (back to published)' });
     reset.addEventListener('click', function () {
-      if (!confirm('This removes ALL your saved edits and uploaded images from this browser. Continue?')) return;
+      if (!confirm('This removes your local edits and images from this browser. The site will show the last PUBLISHED content (nothing on GitHub is changed). Continue?')) return;
       idbClear().catch(function () { }).then(function () {
         localStorage.removeItem(CFG.lsKey);
+        localStorage.removeItem(PUB_CACHE);
         toast('Reset done. Reloading...', 'ok');
         setTimeout(function () { location.reload(); }, 600);
       });
     });
     body.appendChild(section('Backup', [exp, el('div', { class: 'adm-spacer' }), impBtn, imp]));
     body.appendChild(section('Danger zone', [reset]));
-    body.appendChild(el('p', { class: 'adm-note adm-warn', html: '<strong>Note:</strong> this panel runs only in the browser. Anyone with developer tools can bypass the sign-in, and visitors on other devices will not see your changes. For a secure public admin, connect a backend such as Firebase.' }));
+    body.appendChild(el('p', { class: 'adm-note adm-warn', html: '<strong>Note:</strong> the sign-in runs only in the browser, so anyone with developer tools could open this panel. They still cannot change your live site, because publishing needs your GitHub token.' }));
   }
 
   function openPanel() {
@@ -991,13 +1261,17 @@
     // text
     Object.keys(draft.text).forEach(function (k) {
       var v = draft.text[k];
-      if (v === (defaults.text[k] || '')) delete data.text[k]; else data.text[k] = v;
+      if (v === (defaults.text[k] || '')) { if (has(pub.text, k)) data.text[k] = v; else delete data.text[k]; }
+      else data.text[k] = v;
     });
 
     // images
     Object.keys(draft.images).forEach(function (path) {
       var v = draft.images[path];
-      if (v === '__reset__') { delete data.images[path]; delete imgCache[path]; jobs.push(idbDel(path)); }
+      if (v === '__reset__') {
+        delete imgCache[path]; jobs.push(idbDel(path));
+        if (pub.images[path]) data.images[path] = 'orig'; else delete data.images[path];
+      }
       else { data.images[path] = 1; imgCache[path] = v; jobs.push(idbSet(path, v)); }
     });
 
@@ -1024,7 +1298,7 @@
 
     // resume
     if (rDirty) {
-      if (rReset || !rDraft) { data.resume = null; }
+      if (rReset || !rDraft) { data.resume = pub.resume ? clone(defaults.resume) : null; }
       else {
         var rr = clone(rDraft);
         rr.intro = (rr.intro || '').trim();
@@ -1036,7 +1310,10 @@
     }
 
     // CV file
-    if (cDraft === '__reset__') { data.cv = null; jobs.push(idbDel('cv:file')); }
+    if (cDraft === '__reset__') {
+      data.cv = pub.cv ? { name: 'GOKUL_CV.pdf', url: defaults.cv } : null;
+      jobs.push(idbDel('cv:file'));
+    }
     else if (cDraft) { data.cv = { name: cDraft.name }; jobs.push(idbSet('cv:file', cDraft.dataUrl)); }
 
     Promise.all(jobs).then(function () {
@@ -1053,13 +1330,34 @@
   /* ------------------------------------------------------------------ */
   /* Init                                                                */
   /* ------------------------------------------------------------------ */
-  function init() {
-    captureDefaults();
+  function applyAll() {
     applyText();
     applyImages();
     renderProjects();
     renderResume();
     applyCv();
+  }
+
+  function fetchPublished() {
+    if (location.protocol === 'file:' || !window.fetch) return;
+    fetch('content/site.json?v=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        if (!j || typeof j !== 'object') return;
+        var n = normPub(j);
+        var str = JSON.stringify(n);
+        if (str === JSON.stringify(pub)) return;
+        pub = n;
+        try { localStorage.setItem(PUB_CACHE, str); } catch (e) { /* ignore */ }
+        applyAll();
+      })
+      .catch(function () { /* no published content yet */ });
+  }
+
+  function init() {
+    captureDefaults();
+    applyAll();
+    fetchPublished();
 
     var link = $('#adminSignInLink');
     if (link) {
