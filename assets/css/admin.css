@@ -262,3 +262,31 @@ body.adm-open { overflow: hidden !important; }
 @media (prefers-reduced-motion: reduce) {
   .adm-panel, .adm-login-box, .adm-overlay, .adm-toast { transition: none !important; animation: none !important; }
 }
+
+/* ---- Publish tab ---- */
+.adm-log {
+  margin-top: 12px;
+  min-height: 56px;
+  max-height: 180px;
+  overflow: auto;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #b8c4d6;
+  font: 12.5px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.adm-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 2px 6px;
+  color: #b8c4d6;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.adm-check input { width: 18px; height: 18px; accent-color: #0b8bff; cursor: pointer; }
